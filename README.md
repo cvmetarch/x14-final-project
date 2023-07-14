@@ -156,6 +156,29 @@ CREATE TABLE classesInRoom (
 	FOREIGN KEY (classId) REFERENCES classes(classId)
 );
 
-INSERT INTO students (studentId, studentName, studentEmail, studentPhone, studentDob) VALUES (1, 'Võ Hữu Minh Chánh', 'chanhvokts@gmail.com', '0984320841', '1985-07-31 12:00:00')
+INSERT INTO students (studentId, studentName, studentEmail, studentPhone, studentDob) VALUES (1, 'Võ Hữu Minh Chánh', 'chanhvokts@gmail.com', '0984320841', '1985-07-31 12:00:00');
 
+INSERT INTO categories (categoryId, categoryName, categoryDescription) VALUES (1, 'Lập trình Web', 'Học cách sử dụng cả kỹ thuật và ý tưởng thiết kế trong lập trình Web');
+INSERT INTO categories (categoryId, categoryName, categoryDescription) VALUES (2, 'Kỹ thuật phần mềm', 'Thiết kế, phân tích và bảo trì phần mềm');
+INSERT INTO categories (categoryId, categoryName, categoryDescription) VALUES (3, 'Khoa học thông tin', 'Toàn cảnh về chuyển hóa thông tin, cách thức tương tác, sử dụng, mua bán thông tin');
+INSERT INTO categories (categoryId, categoryName, categoryDescription) VALUES (4, 'Khoa học máy tính', 'Nghiên cứu về lập trình, lý thuyết và thiết kế của phần mềm');
+INSERT INTO categories (categoryId, categoryName, categoryDescription) VALUES (5, 'Quản trị CSDL', 'Xây dựng CSDL và nghiên cứu tổ chức, lưu trữ, truy xuất lượng lớn thông tin');
+
+INSERT INTO learningtimes (learningTimeId, startTime, endTime) VALUES (1, '9:15:00', '12:15:00');
+INSERT INTO learningtimes (learningTimeId, startTime, endTime) VALUES (2, '14:15:00', '17:15:00');
+INSERT INTO learningtimes (learningTimeId, startTime, endTime) VALUES (3, '19:15:00', '22:15:00');
+
+INSERT INTO facilities (facilityId, facilityName, facilityDescription) VALUES (0, 'Online', 'Học online');
+INSERT INTO facilities (facilityId, facilityName, facilityDescription) VALUES (1, 'HN-NCT', '71 Nguyễn Chí Thanh, Đống Đa, Hà Nội');
+INSERT INTO facilities (facilityId, facilityName, facilityDescription) VALUES (2, 'HN-TC', '22C Thành Công, Ba Đình, Hà Nội');
+INSERT INTO facilities (facilityId, facilityName, facilityDescription) VALUES (3, 'HCM-PMH', '490 Phạm Thái Bường - KĐT Phú Mỹ Hưng, Q. 7, TP HCM');
+INSERT INTO facilities (facilityId, facilityName, facilityDescription) VALUES (4, 'HCM-PXL', '261-263 Phan Xích Long, Q. Phú Nhuận, TP HCM');
+
+INSERT INTO courses (courseId, categoryId, courseName, courseDescription) VALUES (1, 1, 'X-Career', 'Lập trình Website');
+INSERT INTO courses (courseId, categoryId, courseName, courseDescription) VALUES (2, 4, 'CS Course', 'Nhập môn khoa học máy tính');
+INSERT INTO courses (courseId, categoryId, courseName, courseDescription) VALUES (3, 3, 'Data Analyst', 'Phân tích dữ liệu');
+INSERT INTO courses (courseId, categoryId, courseName, courseDescription) VALUES (4, 2, 'Blockchain', 'Lập trình Blockchain');
+INSERT INTO courses (courseId, categoryId, courseName, courseDescription) VALUES (5, 3, 'IT BI/BA', 'Business Intelligence/Business Analyst');
+
+-------------------------
 Done.
