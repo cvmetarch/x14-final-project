@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const students = require('../services/students');
+const courses = require('../services/statics');
 
-/* GET students */
+/* GET courses */
 router.get('/', async function (req, res, next) {
     try {
-        res.json(await students.getStudentList(req.query.page));
+        res.json(await courses.getCourseList(req.query.page));
     } catch (err) {
-        console.error(`Error while getting students `, err.message);
+        console.error(`Error while getting courses `, err.message);
         next(err);
     }
 });
