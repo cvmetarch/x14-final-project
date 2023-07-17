@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
     res.json({message: "OK"});
 });
 
-app.use('/students', students);
+app.use('/student', students);
 
 app.use('/courses', courses);
 app.use('/categories', categories);
