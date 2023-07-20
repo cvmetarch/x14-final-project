@@ -22,16 +22,6 @@ router.get('/:id', async function (req, res, next) {
     }
 });
 
-/* POST new student */
-router.post('/', async function (req, res, next) {
-    try {
-        res.json(await students.createNewStudent(req.body));
-    } catch (err) {
-        console.error(`Error while adding new student`, err.message);
-        next(err);
-    }
-});
-
 /* PUT student */
 router.put('/:id', async function (req, res, next) {
     try {

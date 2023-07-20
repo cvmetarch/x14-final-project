@@ -30,23 +30,6 @@ async function getStudent(id) {
     }
 }
 
-async function createNewStudent(student) {
-    const result = await db.query(
-    `INSERT INTO students
-    (studentId, studentName, studentEmail, studentPhone, studentDob, studentGuardianName, studentGuardianPhone, studentGuardianRelative) 
-    VALUES
-    ((SELECT MAX(studentId)+1 FROM students stud), "${student.name}", "${student.email}", "${student.phone}", "${student.dob}", "${student.guardianName}", "${student.guardianPhone}", "${student.guardianRelative}")
-    `);
-    
-    let message = 'Error while adding new student';
-
-    if (result.affectedRows) {
-        message = 'Student added successfully';
-    }
-
-    return { message };
-}
-
 async function updateStudent(id, student) {
     const result = await db.query(
         `UPDATE students 
@@ -80,7 +63,6 @@ async function removeStudent(id) {
 module.exports = {
     getStudentList,
     getStudent,
-    createNewStudent,
     updateStudent,
     removeStudent
 }

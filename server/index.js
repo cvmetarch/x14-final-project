@@ -2,6 +2,7 @@ const express = require('express');
 
 const authRoutes = require('./routes/auth');
 const students = require('./routes/students');
+const registers = require('./routes/registers');
 const courses = require('./routes/courses');
 const categories = require('./routes/categories');
 const facilities = require('./routes/facilities');
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/student', students);
+app.use('/register', registers);
 
 app.use('/courses', courses);
 app.use('/categories', categories);
