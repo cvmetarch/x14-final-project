@@ -30,7 +30,7 @@ app.use('/facilities', facilities);
 app.use('/lessons', lessons);
 app.use('/learningtimes', learningtimes);
 
-app.use(authRoutes)
+app.use('/admin', authRoutes);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;

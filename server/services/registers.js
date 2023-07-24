@@ -31,30 +31,47 @@ async function getRegister(id) {
 }
 
 async function createNewRegister(studentRegister) {
-    const result = await db.query(
+    const name = studentRegister.name;
+    const email = studentRegister.email;
+    const phone = studentRegister.phone;
+    
+    if (!name.trim()) {
+        message = 'Error: Name is required';
+    }
+    if (!email) {
+        message = 'Error: Email is required';
+    }
+    if (!phone) {
+        message = 'Error: Phone is required';
+    }
+    
+    const result = await db.query(        
         `
         INSERT INTO students
         (studentName, studentEmail, studentPhone)
-        SELECT * FROM (SELECT "${studentRegister.name}" AS studentName, "${studentRegister.email}", "${studentRegister.phone}" AS studentPhone) AS tmp
+        SELECT * FROM (SELECT "${name}" AS studentName, "${email}", "${phone}" AS studentPhone) AS tmp
         WHERE NOT EXISTS (
-            SELECT studentName FROM students WHERE (studentName = "${studentRegister.name}" and studentEmail = "${studentRegister.email}" and studentPhone = "${studentRegister.phone}")
+            SELECT studentName FROM students WHERE (studentName = "${name}" and studentEmail = "${email}" and studentPhone = "${phone}")
         ) LIMIT 1;
         `);
+
+    const courseId = studentRegister.courseId;
+    const facilityId = studentRegister.facilityId;
+    const learningTimeId = studentRegister.learningTimeId;
+
     const result2 = await db.query(
         `
-        INSERT INTO registers(courseId, facilityId, learningTimeId, studentId)
-        SELECT * FROM (SELECT ${studentRegister.courseId} AS courseId, ${studentRegister.facilityId} AS facilityId, ${studentRegister.learningTimeId} AS learningTimeId, (SELECT studentId FROM students WHERE (studentName = "${studentRegister.name}" AND studentEmail = "${studentRegister.email}" AND studentPhone = "${studentRegister.phone}")) AS studentId) AS tmp
+        INSERT INTO registers(courseId, facilityId, learningTimeId, studentId, registerDate)
+        SELECT * FROM (SELECT ${courseId} AS courseId, ${facilityId} AS facilityId, ${learningTimeId} AS learningTimeId, (SELECT studentId FROM students WHERE (studentName = "${name}" AND studentEmail = "${email}" AND studentPhone = "${phone}")) AS studentId, 
+        NOW() AS registerDate) AS tmp
         WHERE NOT EXISTS (
-            SELECT courseId FROM registers WHERE (courseId= ${studentRegister.courseId} AND facilityId= ${studentRegister.facilityId} AND learningTimeId = ${studentRegister.learningTimeId} and studentId = (SELECT studentId FROM students WHERE (studentName = "${studentRegister.name}" AND studentEmail = "${studentRegister.email}" AND studentPhone = "${studentRegister.phone}")))
+            SELECT courseId FROM registers WHERE (courseId= ${courseId} AND facilityId= ${facilityId} AND learningTimeId = ${learningTimeId} and studentId = (SELECT studentId FROM students WHERE (studentName = "${name}" AND studentEmail = "${email}" AND studentPhone = "${phone}")))
         ) LIMIT 1;
         `);
+    
+    // let message = 'Error or Existed student while adding new register';
 
-    let message = 'Error or Existed student while adding new register';
-
-    if (result.affectedRows) {
-        message = 'Student added successfully';
-    }
-    if (result2.affectedRows) {
+    if ((result.affectedRows) & (result2.affectedRows)) {
         message = 'Register added successfully';
     }
 
