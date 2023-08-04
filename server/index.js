@@ -1,6 +1,8 @@
 const express = require('express');
 
 const authRoutes = require('./routes/auth');
+const admins = require('./routes/admins');
+const teachers = require('./routes/teachers');
 const students = require('./routes/students');
 const registers = require('./routes/registers');
 const courses = require('./routes/courses');
@@ -30,7 +32,9 @@ app.use('/facilities', facilities);
 app.use('/lessons', lessons);
 app.use('/learningtimes', learningtimes);
 
-app.use('/admin', authRoutes);
+app.use('/admin', admins);
+app.use('/teacher', teachers);
+app.use('/login', authRoutes);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
