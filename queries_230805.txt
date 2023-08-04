@@ -1,0 +1,43 @@
+ALTER TABLE teachers DROP FOREIGN KEY teachers_ibfk_1;
+ALTER TABLE teachers DROP COLUMN teacherRoleId
+
+ALTER TABLE teachers
+MODIFY teacherPassword VARCHAR(100);
+
+INSERT INTO teachers (teacherId, teacherName, teacherEmail, teacherPhone, teacherUsername, teacherPassword) VALUES (1, 'Lê Duẩn Anh', 'anh.le@gmail.com', '0984320801', 'anh.le', '123456');
+INSERT INTO teachers (teacherId, teacherName, teacherEmail, teacherPhone, teacherUsername, teacherPassword) VALUES (2, 'Võ Diệp Phước Châu', 'chau.vo@gmail.com', '0984320802', 'chau.vo', '123456');
+INSERT INTO teachers (teacherId, teacherName, teacherEmail, teacherPhone, teacherUsername, teacherPassword) VALUES (3, 'Phạm Trường Hưng', 'hung.pham@gmail.com', '0984320803', 'hung.pham', '123456');
+INSERT INTO teachers (teacherId, teacherName, teacherEmail, teacherPhone, teacherUsername, teacherPassword) VALUES (4, 'Đỗ Chinh', 'chinh.do@gmail.com', '0984320804', 'chinh.do', '123456');
+
+CREATE TABLE studentsPerClass (
+	id INT(10) AUTO_INCREMENT PRIMARY KEY,
+	classId INT(10),
+	studentId INT(10),
+	teacherRoleId INT(10),
+	FOREIGN KEY (classId) REFERENCES classes(classId),
+	FOREIGN KEY (studentId) REFERENCES students(studentId),
+	FOREIGN KEY (teacherRoleId) REFERENCES teacherRoles(teacherRoleId)
+);
+
+ALTER TABLE teachersPerClass
+MODIFY COLUMN id INT(10) AUTO_INCREMENT;
+
+ALTER TABLE teachersperclass DROP FOREIGN KEY teachersperclass_ibfk_1;
+ALTER TABLE classesinroom DROP FOREIGN KEY classesinroom_ibfk_2;
+ALTER TABLE attendances DROP FOREIGN KEY attendances_ibfk_2;
+ALTER TABLE feedbacksperclass DROP FOREIGN KEY feedbacksperclass_ibfk_2;
+ALTER TABLE studentsperclass DROP FOREIGN KEY studentsperclass_ibfk_1;
+
+alter table classes
+modify column classId INT auto_increment;
+
+ALTER TABLE teachersperclass
+ADD FOREIGN KEY (classId) REFERENCES classes(classId);
+ALTER TABLE classesinroom
+ADD FOREIGN KEY (classId) REFERENCES classes(classId);
+ALTER TABLE attendances
+ADD FOREIGN KEY (classId) REFERENCES classes(classId);
+ALTER TABLE feedbacksperclass
+ADD FOREIGN KEY (classId) REFERENCES classes(classId);
+ALTER TABLE studentsperclass
+ADD FOREIGN KEY (classId) REFERENCES classes(classId);

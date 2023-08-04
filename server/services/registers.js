@@ -69,7 +69,7 @@ async function createNewRegister(studentRegister) {
         ) LIMIT 1;
         `);
     
-    // let message = 'Error or Existed student while adding new register';
+    let message = 'Error or Existed student while adding new register';
 
     if ((result.affectedRows) & (result2.affectedRows)) {
         message = 'Register added successfully';

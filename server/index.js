@@ -11,6 +11,8 @@ const facilities = require('./routes/facilities');
 const lessons = require('./routes/lessons');
 const learningtimes = require('./routes/learningtimes');
 
+const classes = require('./routes/classes');
+
 const app = express();
 app.use(express.json());
 app.use(
@@ -35,6 +37,8 @@ app.use('/learningtimes', learningtimes);
 app.use('/admin', admins);
 app.use('/teacher', teachers);
 app.use('/login', authRoutes);
+
+app.use('/class', classes);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
