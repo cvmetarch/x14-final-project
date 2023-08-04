@@ -33,5 +33,15 @@ ALTER TABLE registers
 ADD COLUMN learningTimeId INT AFTER studentId;
 
 -----
+CREATE TABLE IF NOT EXISTS admins (
+	id INT(10) PRIMARY KEY AUTO_INCREMENT,	
+	adminName VARCHAR(50),
+	adminUsername VARCHAR(50),
+	adminPassword VARCHAR(100),
+	status BOOL,
+	createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
+	updatedAt TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW()  
+);
 
-
+INSERT INTO admins (adminName, adminUsername, adminPassword) VALUES ('Admin','admin','123456');
+INSERT INTO admins (adminName, adminUsername, adminPassword) VALUES ('Moderator','moderator','123456');

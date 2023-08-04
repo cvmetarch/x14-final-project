@@ -45,6 +45,39 @@ async function adminLogin(admin) {
     return { message };
 };
 
+async function getStudentRegisterByCourse(id) {
+    const rows = await db.query(
+        `
+        SELECT registers.courseId, registers.facilityId, registers.learningTimeId, students.studentName, students.studentEmail, registers.registerDate,registers.registerCourseStatusId, registers.cancellationReason
+        FROM registers
+        LEFT JOIN students ON registers.studentId=students.studentId
+        WHERE ((registers.courseId=${id}) AND (registers.registerCourseStatusId!=4));
+    `);
+
+    const data = helper.emptyOrRows(rows);
+
+    return {
+        data
+    }
+}
+
+async function getRegisterCourse() {
+    const rows = await db.query(
+        `
+        SELECT courseId, count(CASE WHEN registerCourseStatusId < 4 THEN registerCourseStatusId END) as registeredCount
+        FROM registers
+        Group By courseId
+        HAVING registeredCount > 0;
+    `);
+
+    const data = helper.emptyOrRows(rows);
+
+    return {
+        data
+    }
+}
+
+
 async function hashingPassword(id) {  
 
     const currentPassword = await db.query(
@@ -74,5 +107,7 @@ async function hashingPassword(id) {
 module.exports = {
     getAdminList,
     adminLogin,
+    getStudentRegisterByCourse,
+    getRegisterCourse,
     hashingPassword
 };

@@ -12,4 +12,13 @@ router.get('/', async function (req, res, next) {
     }
 });
 
+router.post('/create', async function (req, res, next) {
+    try {
+        res.json(await courses.createCourse(req.body));
+    } catch (err) {
+        console.error(`Error while creating course `, err.message);
+        next(err);
+    }
+});
+
 module.exports = router;

@@ -17,10 +17,35 @@ async function getCourseList(page = 1) {
     }
 }
 
+async function createCourse(newCourse) {    
+    const result = await db.query(
+        `
+        INSERT INTO courses
+        (courseId, categoryId, courseName, courseDescription)
+        VALUES
+        ((SELECT MAX(courseId) + 1 FROM courses c), ${newCourse.categoryId}, "${newCourse.name}", "${newCourse.description}");
+        `
+    );
+    let message = 'Error while adding new course';
+    if (result.affectedRows) {
+        message = 'Course added successfully';
+    }
+    return {message};
+    
+}
+
+async function createNewRegister(studentRegister) {
+    const name = studentRegister.name;
+    const email = studentRegister.email;
+    const phone = studentRegister.phone;
+
+    return { message };
+}
+
 async function getCategoryList(page = 1) {   
     const rows = await db.query(
         `SELECT *
-    FROM courses`
+    FROM categories`
     );
     const data = helper.emptyOrRows(rows);
 
@@ -76,6 +101,7 @@ async function getLearningTimeList(page = 1) {
 
 module.exports = {
     getCourseList,
+    createCourse,
     getCategoryList,
     getFacilityList,
     getLessonList,

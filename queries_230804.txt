@@ -1,0 +1,6 @@
+UPDATE registers SET registerCourseStatusId=1 WHERE registerCourseStatusId IS NULL;
+
+ALTER TABLE registers MODIFY COLUMN registerCourseStatusId INT NOT NULL DEFAULT 1;
+
+INSERT INTO teacherroles (teacherRoleId, teacherRoleDescription) VALUES (1, 'Main teacher');
+INSERT INTO teacherroles (teacherRoleId, teacherRoleDescription) VALUES (2, 'Mentor');
