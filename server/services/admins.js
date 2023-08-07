@@ -21,10 +21,10 @@ async function getAdminList(page = 1) {
 async function getStudentRegisterByCourse(id) {
     const rows = await db.query(
         `
-        SELECT registers.courseId, registers.facilityId, registers.learningTimeId, students.studentName, students.studentEmail, registers.registerDate,registers.registerCourseStatusId, registers.cancellationReason
-        FROM registers
-        LEFT JOIN students ON registers.studentId=students.studentId
-        WHERE ((registers.courseId=${id}) AND (registers.registerCourseStatusId!=4));
+        SELECT r.courseId, r.facilityId, r.learningTimeId, s.studentId, s.studentName, s.studentEmail, r.registerDate,r.registerCourseStatusId, r.cancellationReason
+        FROM registers r
+        LEFT JOIN students s ON r.studentId=s.studentId
+        WHERE ((r.courseId=${id}) AND (r.registerCourseStatusId!=4));
     `);
 
     const data = helper.emptyOrRows(rows);

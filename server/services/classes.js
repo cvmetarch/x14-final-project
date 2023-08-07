@@ -19,12 +19,15 @@ async function getClassList(page = 1) {
 
 async function getClass(id) {
     const rows = await db.query(
-        `SELECT c.classId, c.courseId, c.className, c.learningTimeId, s.studentId, t.teacherId, t.teacherRoleId, c.startDate, c.endDate
-FROM classes c
-inner JOIN studentsperclass s
-ON (c.classId=${id} AND s.classId=${id})
-inner JOIN teachersperclass t
-ON (c.classId=${id} AND t.classId=${id});`
+    `
+        SELECT DISTINCT c.classId, c.courseId, c.className, c.learningTimeId, s.studentId, t.teacherId, t.teacherRoleId, c.startDate, c.endDate
+        FROM classes c
+        inner JOIN studentsperclass s
+        ON (c.classId=${id} AND s.classId=${id})
+        inner JOIN teachersperclass t
+        ON (c.classId=${id} AND t.classId=${id})
+        WHERE (t.teacherRoleId=1);
+    `
     );
     const data = helper.emptyOrRows(rows);
 
@@ -44,10 +47,11 @@ async function createClass(classBody) {
         `
         INSERT INTO classes
         (courseId, className, learningTimeId, startDate, endDate)
-        VALUES
-        (${courseId}, "${className}", ${timeId}, "${startDate}", "${endDate}");
-        `
-    );
+        SELECT * FROM(SELECT ${courseId} cId, "${className}" cName, ${timeId} tId, "${startDate}" sDate, "${endDate}" eDate) tmp
+        WHERE NOT EXISTS(
+            SELECT courseId FROM classes WHERE(courseId = ${courseId} and className = "${className}" and learningTimeId = ${timeId} and startDate = "${startDate}" and endDate = "${endDate}")
+        ) LIMIT 1;
+        `);
 
     let message = 'Tạo lớp học không thành công!';
 
@@ -65,37 +69,46 @@ async function updateClass(id, classBody) {
     const startDate = classBody.startDate;
     const endDate = classBody.endDate;
 
+    let message = 'Cập nhật không thành công!';
+    let resultStudent;
+    let resultTeacher;
     const result = await db.query(
         `
         UPDATE classes 
-        SET courseId="${courseId}", className="${className}", learningTimeId="${timeId}", startDate="${startDate}", endDate="${endDate}"
-        WHERE classId=${id}
+        SET courseId=${courseId}, className="${className}", learningTimeId=${timeId}, startDate="${startDate}", endDate="${endDate}"
+        WHERE (classId=${id} and (courseId!=${courseId} or className!="${className}" or learningTimeId!=${timeId} or startDate!="${startDate}" or endDate!="${endDate}"));
         `
     );
     
     const studentId = classBody.studentId;
     if (studentId!=0) {
-    const resultStudent = await db.query(
-        `        
-        INSERT INTO studentsPerClass(classId, studentId)
-        VALUES (${id}, ${studentId});
-        `);
+        resultStudent = await db.query(
+            `
+            INSERT INTO studentsPerClass
+            (classId, studentId)
+            SELECT * FROM(SELECT ${id} AS cId, ${studentId} AS sId) AS tmp
+            WHERE NOT EXISTS(
+                SELECT studentId FROM studentsPerClass WHERE(studentId = ${studentId} and classId = ${id})
+            ) LIMIT 1;
+            `);        
     };
 
     const teacherId = classBody.teacherId;
     const teacherRoleId = classBody.teacherRoleId;
 
-    if ((teacherId!=0) & (teacherRoleId!=0)) {
-    const resultTeacher = await db.query(
-        `
-        INSERT INTO teachersPerClass(classId, teacherId, teacherRoleId)
-        VALUE (${id}, ${teacherId}, ${teacherRoleId});
-        `);
+    if ((teacherId!=0) & (teacherRoleId!=0)) {        
+        resultTeacher = await db.query(
+            `
+            INSERT INTO teachersPerClass
+            (classId, teacherId, teacherRoleId)
+            SELECT * FROM(SELECT ${id} AS cId, ${teacherId} AS tId, ${teacherRoleId} AS tcID) AS tmp
+            WHERE NOT EXISTS (
+                SELECT teacherId FROM teachersPerClass WHERE(teacherId = ${teacherId} and classId = ${id})
+            ) LIMIT 1;
+            `);
     };
 
-    let message = 'Cập nhật không thành công!';
-
-    if (result.affectedRows) {
+    if (result.changedRows | resultStudent.affectedRows | resultTeacher.affectedRows) {
         message = 'Cập nhật thông tin lớp học thành công!';
     }
 
