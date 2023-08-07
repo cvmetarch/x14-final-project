@@ -1,5 +1,5 @@
 ALTER TABLE teachers DROP FOREIGN KEY teachers_ibfk_1;
-ALTER TABLE teachers DROP COLUMN teacherRoleId
+ALTER TABLE teachers DROP COLUMN teacherRoleId;
 
 ALTER TABLE teachers
 MODIFY teacherPassword VARCHAR(100);

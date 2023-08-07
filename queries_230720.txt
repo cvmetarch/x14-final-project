@@ -1,7 +1,7 @@
 ALTER TABLE learningtimes
 ADD COLUMN weekDay VARCHAR(50);
 
-UPDATE learningtimes SET weekDay = 'Thứ 2-4-6' WHERE (learningTimeId = 1) OR (learningTimeId = 2) OR (learningTimeId = 3)
+UPDATE learningtimes SET weekDay = 'Thứ 2-4-6' WHERE (learningTimeId = 1) OR (learningTimeId = 2) OR (learningTimeId = 3);
 INSERT INTO learningtimes (learningTimeId, startTime, endTime, weekDay) VALUES (4, '9:15:00', '12:15:00', 'Thứ 3-5-7');
 INSERT INTO learningtimes (learningTimeId, startTime, endTime, weekDay) VALUES (5, '14:15:00', '17:15:00', 'Thứ 3-5-7');
 INSERT INTO learningtimes (learningTimeId, startTime, endTime, weekDay) VALUES (6, '19:15:00', '22:15:00', 'Thứ 3-5-7');
@@ -27,12 +27,11 @@ ADD FOREIGN KEY (studentId) REFERENCES students(studentId);
 ALTER TABLE feedbacksperclass
 ADD FOREIGN KEY (studentId) REFERENCES students(studentId);
 
-ALTER TABLE registers MODIFY COLUMN id INT auto_increment
+ALTER TABLE registers MODIFY COLUMN id INT auto_increment;
 
 ALTER TABLE registers
 ADD COLUMN learningTimeId INT AFTER studentId;
 
------
 CREATE TABLE IF NOT EXISTS admins (
 	id INT(10) PRIMARY KEY AUTO_INCREMENT,	
 	adminName VARCHAR(50),
