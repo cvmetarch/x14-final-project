@@ -24,6 +24,7 @@ export default function reducer(state, action) {
             return {
                 ...state,
                 isModal: true,
+                selectedCourse: action.payload,
             }
         case "CLOSE_MODAL":
             return {

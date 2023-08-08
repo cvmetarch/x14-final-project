@@ -10,11 +10,26 @@ import blockchain from "../../assets/image/blockchain_banner.jpg";
 import businessAnalyst from "../../assets/image/ba_banner.png";
 
 const images = [
-    { image: fullstack, },
-    { image: computerScience, },
-    { image: dataAnalyst, },
-    { image: blockchain, },
-    { image: businessAnalyst, },
+    {
+        id: 1,
+        image: fullstack,
+    },
+    {
+        id: 2,
+        image: computerScience,
+    },
+    {
+        id: 3,
+        image: dataAnalyst,
+    },
+    {
+        id: 4,
+        image: blockchain,
+    },
+    {
+        id: 5,
+        image: businessAnalyst,
+    },
 ];
 
 export default function CourseList() {
@@ -42,7 +57,7 @@ export default function CourseList() {
                 LỘ TRÌNH HỌC TẬP
             </Typography>
             <Grid container spacing={{ xs: 4, md: 4 }} columns={{ xs: 4, sm: 12, md: 12 }} marginBottom={20}>
-                {courses.map(({ courseId, courseName, courseDescription}, index) => (
+                {courses.map(({ courseId, courseName, courseDescription }, index) => (
                     <Grid key={courseId} item xs={12} md={4}>
                         <Card
                             variant="outlined"
@@ -60,7 +75,7 @@ export default function CourseList() {
                             <CardContent>
                                 <Typography gutterBottom fontSize="18px" fontWeight="bold">{courseName}</Typography>
                                 <Typography gutterBottom variant="body2" fontSize="16px">{courseDescription}</Typography>
-                                <RegisterButton />
+                                <RegisterButton id={courseId} />
                             </CardContent>
                             <Box></Box>
                         </Card>

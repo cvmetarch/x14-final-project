@@ -21,6 +21,7 @@ export default function Form() {
         loading,
         closeModal,
         openAlert,
+        selectedCourse
     } = useGlobalContext();
 
     const [name, setName] = useState("");
@@ -48,7 +49,7 @@ export default function Form() {
     useEffect(() => {
         getFormInfo();
     }, []);
-
+    
     return (
         <form
             onSubmit={handleSubmit}
@@ -94,7 +95,7 @@ export default function Form() {
                     />
                     <FormControl fullWidth size="small" margin="normal">
                         <InputLabel>Khóa Học</InputLabel>
-                        <Select label="Khóa Học" defaultValue="" onChange={(e) => setCourseId(e.target.value)}>
+                        <Select label="Khóa Học" defaultValue={selectedCourse} onChange={(e) => setCourseId(e.target.value)}>
                             {courses.map(({ courseId, courseName, courseDescription }) => (
                                 <MenuItem key={courseName} value={courseId}>{courseDescription}</MenuItem>
                             ))}

@@ -10,7 +10,8 @@ const initalState = {
     loading: false,
     isModal: false,
     isAlert: false,
-    message: ""
+    message: "",
+    selectedCourse: "",
 };
 
 export const AppContext = createContext();
@@ -19,7 +20,7 @@ export const AppContext = createContext();
 export function AppProvider({ children }) {
     const [state, dispatch] = useReducer(reducer, initalState);
 
-    const openModal = () => dispatch({ type: "OPEN_MODAL" });
+    const openModal = (id) => dispatch({ type: "OPEN_MODAL", payload: id });
     const closeModal = () => dispatch({ type: "CLOSE_MODAL" });
 
     const openAlert = () => dispatch({ type: "OPEN_ALERT" });
