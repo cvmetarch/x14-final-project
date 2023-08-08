@@ -7,7 +7,7 @@ router.get('/all', async function (req, res, next) {
     try {
         res.json(await students.getStudentList(req.query.page));
     } catch (err) {
-        console.error(`Error while getting students `, err.message);
+        console.error(`Lỗi khi lấy danh sách học viên `, err.message);
         next(err);
     }
 });
@@ -17,7 +17,7 @@ router.get('/:id', async function (req, res, next) {
     try {
         res.json(await students.getStudent(req.params.id));
     } catch (err) {
-        console.error(`Error while getting student `, err.message);
+        console.error(`Lỗi khi lấy thông tin học viên `, err.message);
         next(err);
     }
 });
@@ -27,7 +27,7 @@ router.put('/:id', async function (req, res, next) {
     try {
         res.json(await students.updateStudent(req.params.id, req.body));
     } catch (err) {
-        console.error(`Error while updating student`, err.message);
+        console.error(`Cập nhật thông tin học viên không thành công `, err.message);
         next(err);
     }
 });
@@ -37,7 +37,7 @@ router.delete('/:id', async function (req, res, next) {
     try {
         res.json(await students.removeStudent(req.params.id));
     } catch (err) {
-        console.error(`Error while deleting student`, err.message);
+        console.error(`Xóa học viên không thành công `, err.message);
         next(err);
     }
 });

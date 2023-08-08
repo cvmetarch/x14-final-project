@@ -17,6 +17,19 @@ async function getCourseList(page = 1) {
     }
 }
 
+async function getCourse(id) {
+    const rows = await db.query(
+        `SELECT *
+    FROM courses
+    WHERE courseId=${id}`
+    );
+    const data = helper.emptyOrRows(rows);
+
+    return {
+        data
+    }
+}
+
 async function createCourse(newCourse) {    
     const result = await db.query(
         `
@@ -32,14 +45,6 @@ async function createCourse(newCourse) {
     }
     return {message};
     
-}
-
-async function createNewRegister(studentRegister) {
-    const name = studentRegister.name;
-    const email = studentRegister.email;
-    const phone = studentRegister.phone;
-
-    return { message };
 }
 
 async function getCategoryList(page = 1) {   
@@ -101,6 +106,7 @@ async function getLearningTimeList(page = 1) {
 
 module.exports = {
     getCourseList,
+    getCourse,
     createCourse,
     getCategoryList,
     getFacilityList,
