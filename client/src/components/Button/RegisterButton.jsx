@@ -1,14 +1,8 @@
-import { useState } from "react";
-import { Box, Button, Modal } from "@mui/material";
-import Form from "../Form";
-import formImage from "../../assets/image/form-image.png";
+import { Box, Button } from "@mui/material";
+import useGlobalContext from "../../context/useGlobalContext";
 
 export default function RegisterButton() {
-    const [open, setOpen] = useState(false);
-
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
+    const { openModal } = useGlobalContext();
     return (
         <Box>
             <Button
@@ -20,26 +14,10 @@ export default function RegisterButton() {
                     fontWeight: "Bold",
                     ":hover": { bgcolor: "#e22630" }
                 }}
-                onClick={handleOpen}
+                onClick={openModal}
             >
                 Đăng ký
             </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-            >
-                <Box sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    bgcolor: "background.paper",
-                    display: "flex",
-                }}>
-                    <img src={formImage} alt="image" width={791} />
-                    <Form />
-                </Box>
-            </Modal>
         </Box>
     );
 }

@@ -20,7 +20,38 @@ export default function reducer(state, action) {
                 ...state,
                 categories: action.payload,
             };
-        case "LOADING": 
+        case "OPEN_MODAL":
+            return {
+                ...state,
+                isModal: true,
+            }
+        case "CLOSE_MODAL":
+            return {
+                ...state,
+                isModal: false,
+            }
+        case "OPEN_ALERT":
+            return {
+                ...state,
+                isAlert: true,
+            }
+        case "CLOSE_ALERT":
+            return {
+                ...state,
+                isAlert: false,
+            }
+        case "SUBMIT_SUCCESS":
+            return {
+                ...state,
+                loading: false,
+                message: action.payload,
+            }
+        case "SUBMIT_FAIL":
+            return {
+                ...state,
+                loading: false,
+            };
+        case "LOADING":
             return {
                 ...state,
                 loading: true

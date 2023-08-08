@@ -8,6 +8,9 @@ const initalState = {
     learningTimes: [],
     categories: [],
     loading: false,
+    isModal: false,
+    isAlert: false,
+    message: ""
 };
 
 export const AppContext = createContext();
@@ -16,9 +19,20 @@ export const AppContext = createContext();
 export function AppProvider({ children }) {
     const [state, dispatch] = useReducer(reducer, initalState);
 
+    const openModal = () => dispatch({ type: "OPEN_MODAL" });
+    const closeModal = () => dispatch({ type: "CLOSE_MODAL" });
+
+    const openAlert = () => dispatch({ type: "OPEN_ALERT" });
+    const closeAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        dispatch({ type: "CLOSE_ALERT" });
+    };
+
     const getFormInfo = async () => {
         try {
-            const data = await Promise.all([                
+            const data = await Promise.all([
                 axios.get("/courses"),
                 axios.get("/facilities"),
                 axios.get("/learningtimes"),
@@ -38,9 +52,10 @@ export function AppProvider({ children }) {
         dispatch({ type: "LOADING" });
         try {
             const response = await axios.post("/register", data);
-            console.log(response);
+            dispatch({ type: "SUBMIT_SUCCESS", payload: response.data.message });
         } catch (error) {
             console.log(error);
+            dispatch({ type: "SUBMIT_FAIL" });
         }
     }
 
@@ -50,6 +65,10 @@ export function AppProvider({ children }) {
                 ...state,
                 getFormInfo,
                 submitForm,
+                openModal,
+                closeModal,
+                openAlert,
+                closeAlert,
             }}
         >
             {children}
