@@ -1,8 +1,10 @@
 import { createContext, useReducer } from "react";
-import axios from "../config/axiosConfig";
+import axiosConfig from "../config/axiosConfig";
 import reducer from "./reducer";
 
 const initalState = {
+    students: [],
+    teachers: [],
     courses: [],
     facilities: [],
     learningTimes: [],
@@ -34,10 +36,10 @@ export function AppProvider({ children }) {
     const getFormInfo = async () => {
         try {
             const data = await Promise.all([
-                axios.get("/courses"),
-                axios.get("/facilities"),
-                axios.get("/learningtimes"),
-                axios.get("/categories"),
+                axiosConfig.get("/courses"),
+                axiosConfig.get("/facilities"),
+                axiosConfig.get("/learningtimes"),
+                axiosConfig.get("/categories"),
             ]);
             dispatch({ type: "SET_COURSE", payload: data[0].data.data });
             dispatch({ type: "SET_FACILITY", payload: data[1].data.data });
@@ -49,14 +51,44 @@ export function AppProvider({ children }) {
         }
     }
 
-    const submitForm = async (data) => {
+    const submitForm = async (formData) => {
         dispatch({ type: "LOADING" });
         try {
-            const response = await axios.post("/register", data);
-            dispatch({ type: "SUBMIT_SUCCESS", payload: response.data.message });
+            const { data } = await axiosConfig.post("/register", formData);
+            dispatch({ type: "SUBMIT_SUCCESS", payload: data.message });
         } catch (error) {
             console.log(error);
             dispatch({ type: "SUBMIT_FAIL" });
+        }
+    }
+
+    const login = async (formData) => {
+        dispatch({ type: "LOADING" });
+        try {
+            const { data } = await axiosConfig.post("/login", formData);
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getAllStudents = async () => {
+        dispatch({ type: "LOADING" });
+        try {
+            const { data } = await axiosConfig.get("/student/all");
+            dispatch({ type: "GET_ALL_STUDENTS", payload: data.data });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getAllTeachers = async () => {
+        dispatch({ type: "LOADING" });
+        try {
+            const { data } = await axiosConfig.get("/teacher/all");
+            dispatch({ type: "GET_ALL_TEACHERS", payload: data.data });
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -70,6 +102,9 @@ export function AppProvider({ children }) {
                 closeModal,
                 openAlert,
                 closeAlert,
+                login,
+                getAllStudents,
+                getAllTeachers,
             }}
         >
             {children}

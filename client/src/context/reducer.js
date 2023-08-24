@@ -57,6 +57,18 @@ export default function reducer(state, action) {
                 ...state,
                 loading: true
             };
+        case "GET_ALL_STUDENTS": 
+            return {
+                ...state,
+                loading: false,
+                students: action.payload
+            }
+        case "GET_ALL_TEACHERS": 
+            return {
+                ...state,
+                loading: false,
+                teachers: action.payload
+            }
         default:
             return new Error("Invalid action");
     }

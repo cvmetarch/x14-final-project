@@ -10,14 +10,3 @@ body::-webkit-scrollbar-thumb {
     background-color: #ddd;
     border-radius: 15px;
 }
-
-::-moz-selection {
-    /* Code for Firefox */
-    color: #f8fafc;
-    background: #e22630;
-}
-
-::selection {
-    color: #f8fafc;
-    background: #e22630;
-}
