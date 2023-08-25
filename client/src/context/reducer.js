@@ -57,6 +57,19 @@ export default function reducer(state, action) {
                 ...state,
                 loading: true
             };
+        case "LOGIN_SUCCESS": 
+            return {
+                ...state,
+                loading: false,
+                message: action.payload,
+                isAuthenticated: true,
+            }
+        case "LOGIN_FAIL":
+            return {
+                ...state,
+                loading: false,
+                isAuthenticated: false,
+            }
         case "GET_ALL_STUDENTS": 
             return {
                 ...state,

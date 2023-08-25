@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, Typography, Button } from '@mui/material/';
 import { DataGrid } from '@mui/x-data-grid';
 
-export default function Courses() {
+export default function StudentRegisterCourses() {
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },

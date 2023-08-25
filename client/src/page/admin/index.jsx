@@ -22,7 +22,8 @@ import RoomPreferencesIcon from '@mui/icons-material/RoomPreferences';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import LoginForm from "../auth";
+import ForbiddenAccess from "../../components/ForbiddenAccess";
+import useGlobalContext from '../../context/useGlobalContext';
 
 const drawerWidth = 240;
 
@@ -74,39 +75,44 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const options = [
     {
         text: 'Danh sách đăng ký',
-        link: '/admin/course',
+        link: '/admin/student-register-courses',
         icon: <LibraryBooksIcon />
     },
     {
         text: 'Giảng viên',
-        link: '/admin/teacher',
+        link: '/admin/teachers',
         icon: <Person />
     },
     {
         text: 'Học viên',
-        link: '/admin/student',
+        link: '/admin/students',
         icon: <PeopleAltIcon />
     },
     {
         text: 'Cơ sở',
-        link: '/admin/facility',
+        link: '/admin/facilities',
         icon: <HomeWorkIcon />
     },
     {
         text: 'Lớp học',
-        link: '/admin/class',
+        link: '/admin/classes',
         icon: <RoomPreferencesIcon />
     },
 ];
 
 
-export default function Admin() {
+export default function AdminLayout() {
     const theme = useTheme();
+    const { isAuthenticated, isFail } = useGlobalContext();
     const [open, setOpen] = React.useState(false);
     const [active, setActive] = React.useState("");
 
+    console.log(isFail)
+
     const handleDrawerOpen = () => {
-        setOpen(true);
+        if (isAuthenticated) {
+            setOpen(true);
+        }
     };
 
     const handleDrawerClose = () => {
@@ -177,7 +183,7 @@ export default function Admin() {
             <Main open={open}>
                 <DrawerHeader />
                 {/* Content Here */}
-                {true ? <Outlet /> : <LoginForm />}
+                {isAuthenticated ? <Outlet /> : <ForbiddenAccess />}
             </Main>
         </Box>
     );

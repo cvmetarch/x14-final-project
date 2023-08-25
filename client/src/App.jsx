@@ -1,27 +1,38 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { protectedRoutes } from "./routes/protected/protected";
+import ProtectedRoutes from "./routes/protected/ProtectedRoutes";
 import Admin from "./page/admin";
 import Home from "./page/home";
-import Courses from "./page/courses";
-import ClassRoom from "./page/class";
-import Facility from "./page/facility";
-import Student from "./page/student";
-import Teacher from "./page/teacher";
+import useGlobalContext from "./context/useGlobalContext";
 
 export default function App() {
+    const { isAuthenticated } = useGlobalContext();
+
     return (
         <div className="app">
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/admin" element={<Admin />}>
-                        <Route path="/admin/course" element={<Courses />} />
-                        <Route path="/admin/class" element={<ClassRoom />} />
-                        <Route path="/admin/student" element={<Student />} />
-                        <Route path="/admin/teacher" element={<Teacher />} />
-                        <Route path="/admin/facility" element={<Facility />} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/admin" element={<Admin />}>
+                    {protectedRoutes.map(route => {
+                        const Element = route.element;
+                        return <Route
+                            key={route.id}
+                            path={route.path}
+                            element={
+                                <ProtectedRoutes
+                                    isAuthenticated={isAuthenticated}
+                                    redirectPath="/admin"
+                                >
+                                    <Element />
+                                </ProtectedRoutes>
+                            }
+                        />
+                    })}
+                </Route>
+            </Routes>
+            <ToastContainer autoClose={3000} />
         </div>
     );
 }

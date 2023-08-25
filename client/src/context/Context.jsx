@@ -1,8 +1,11 @@
 import { createContext, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import axiosConfig from "../config/axiosConfig";
 import reducer from "./reducer";
 
 const initalState = {
+    isAuthenticated: false,
     students: [],
     teachers: [],
     courses: [],
@@ -21,6 +24,7 @@ export const AppContext = createContext();
 // eslint-disable-next-line react/prop-types
 export function AppProvider({ children }) {
     const [state, dispatch] = useReducer(reducer, initalState);
+    const navigate = useNavigate();
 
     const openModal = (id) => dispatch({ type: "OPEN_MODAL", payload: id });
     const closeModal = () => dispatch({ type: "CLOSE_MODAL" });
@@ -57,7 +61,6 @@ export function AppProvider({ children }) {
             const { data } = await axiosConfig.post("/register", formData);
             dispatch({ type: "SUBMIT_SUCCESS", payload: data.message });
         } catch (error) {
-            console.log(error);
             dispatch({ type: "SUBMIT_FAIL" });
         }
     }
@@ -66,9 +69,11 @@ export function AppProvider({ children }) {
         dispatch({ type: "LOADING" });
         try {
             const { data } = await axiosConfig.post("/login", formData);
-            console.log(data);
+            dispatch({ type: "LOGIN_SUCCESS", payload: data });
+            toast.success("Đăng nhập thành công");
         } catch (error) {
-            console.log(error);
+            dispatch({ type: "LOGIN_FAIL" });
+            toast.error("Đăng nhập thất bại");    
         }
     }
 
