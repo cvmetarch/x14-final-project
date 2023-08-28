@@ -21,7 +21,7 @@ async function getAdminList(page = 1) {
 async function getStudentRegisterByCourse(id) {
     const rows = await db.query(
         `
-        SELECT r.courseId, r.facilityId, r.learningTimeId, s.studentId, s.studentName, s.studentEmail, r.registerDate,r.registerCourseStatusId, r.cancellationReason
+        SELECT r.courseId, r.facilityId, r.learningTimeId, s.studentId, s.studentName, s.studentEmail, s.studentPhone, r.registerDate,r.registerCourseStatusId, r.cancellationReason
         FROM registers r
         LEFT JOIN students s ON r.studentId=s.studentId
         WHERE ((r.courseId=${id}) AND (r.registerCourseStatusId!=4));

@@ -8,6 +8,7 @@ const initalState = {
     isAuthenticated: false,
     students: [],
     teachers: [],
+    studentRegisters: [],
     courses: [],
     facilities: [],
     learningTimes: [],
@@ -106,6 +107,16 @@ export function AppProvider({ children }) {
         }
     }
 
+    const getStudentRegisterByCourse = async () => {
+        dispatch({ type: "LOADING" });
+        try {           
+            const { data } = await axiosConfig.get("/admin/course/1");
+            dispatch({ type: "GET_ALL_STUDENTS_REGISTRATION", payload: data.data });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const getStudentsRegisterCourse = async () => {
         dispatch({ type: "LOADING" });
         try {
@@ -129,6 +140,7 @@ export function AppProvider({ children }) {
                 logout,
                 getAllStudents,
                 getAllTeachers,
+                getStudentRegisterByCourse,
             }}
         >
             {children}

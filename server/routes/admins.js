@@ -16,7 +16,8 @@ router.get('/all', async function (req, res, next) {
 });
 
 //get register course
-router.get('/courses', requireSignin, isAdmin, async function (req, res, next) {
+// requireSignin, isAdmin,
+router.get('/courses', async function (req, res, next) {
     try {
         res.json(await admins.getRegisterCourse(req.body));
     } catch (err) {
@@ -26,7 +27,8 @@ router.get('/courses', requireSignin, isAdmin, async function (req, res, next) {
 });
 
 //get student register by course
-router.get('/course/:id', requireSignin, isAdmin, async function (req, res, next) {
+// requireSignin, isAdmin
+router.get('/course/:id', async function (req, res, next) { 
     try {
         res.json(await admins.getStudentRegisterByCourse(req.params.id));
     } catch (err) {
