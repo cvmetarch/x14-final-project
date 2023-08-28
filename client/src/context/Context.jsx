@@ -17,6 +17,7 @@ const initalState = {
     isAlert: false,
     message: "",
     selectedCourse: "",
+    username: "",
 };
 
 export const AppContext = createContext();
@@ -77,6 +78,14 @@ export function AppProvider({ children }) {
         }
     }
 
+    const logout = () => {
+        dispatch({ type: "LOADING" });
+        localStorage.clear();
+        navigate("/admin");
+        window.location.reload();
+        dispatch({ type: "LOG_OUT" });
+    }
+
     const getAllStudents = async () => {
         dispatch({ type: "LOADING" });
         try {
@@ -97,6 +106,15 @@ export function AppProvider({ children }) {
         }
     }
 
+    const getStudentsRegisterCourse = async () => {
+        dispatch({ type: "LOADING" });
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+
     return (
         <AppContext.Provider
             value={{
@@ -108,6 +126,7 @@ export function AppProvider({ children }) {
                 openAlert,
                 closeAlert,
                 login,
+                logout,
                 getAllStudents,
                 getAllTeachers,
             }}

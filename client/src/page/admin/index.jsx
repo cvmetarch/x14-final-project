@@ -23,7 +23,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ForbiddenAccess from "../../components/ForbiddenAccess";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import useGlobalContext from '../../context/useGlobalContext';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Backdrop from '@mui/material/Backdrop';
+import { Button } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -103,15 +108,15 @@ const options = [
 
 export default function AdminLayout() {
     const theme = useTheme();
-    const { isAuthenticated, isFail } = useGlobalContext();
+    const { isAuthenticated, isModal, openModal, closeModal, logout } = useGlobalContext();
     const [open, setOpen] = React.useState(false);
     const [active, setActive] = React.useState("");
-
-    console.log(isFail)
 
     const handleDrawerOpen = () => {
         if (isAuthenticated) {
             setOpen(true);
+        } else {
+            setOpen(false);
         }
     };
 
@@ -166,7 +171,7 @@ export default function AdminLayout() {
                                 display: "block",
                                 backgroundColor: option.text === active ? "#eee" : ""
                             }}
-                        	onClick={(e) => setActive(e.target.innerText)}
+                            onClick={(e) => setActive(e.target.innerText)}
                         >
                             <Link style={{ textDecoration: "none" }} to={option.link}>
                                 <ListItemButton>
@@ -178,6 +183,52 @@ export default function AdminLayout() {
                             </Link>
                         </ListItem>
                     ))}
+                    <Divider />
+                    <ListItem disablePadding>
+                        <ListItemButton onClick={openModal}>
+                            <ListItemIcon>
+                                <ExitToAppIcon />
+                            </ListItemIcon>
+                            <ListItemText sx={{ color: "#333" }} primary="Đăng xuất" />
+                        </ListItemButton>
+                        <Modal
+                            aria-labelledby="transition-modal-title"
+                            aria-describedby="transition-modal-description"
+                            open={isModal}
+                            closeAfterTransition
+                            slots={{ backdrop: Backdrop }}
+                            slotProps={{
+                                backdrop: {
+                                    timeout: 500,
+                                },
+                            }}
+                        >
+                            <Fade in={isModal}>
+                                <Box sx={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: 400,
+                                    bgcolor: 'background.paper',
+                                    p: 4,
+                                }}>
+                                    <Typography id="transition-modal-title" variant="h6" component="h2">
+                                        Bạn muốn đăng xuất khỏi hệ thống
+                                    </Typography>
+                                    <Box sx={{ 
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "flex-end",
+                                        marginTop: 2
+                                    }}>
+                                        <Button variant="outlined" onClick={closeModal}>Hủy</Button>
+                                        <Button variant="contained" sx={{ marginLeft: 2 }} onClick={logout}>Xác nhận</Button>
+                                    </Box>
+                                </Box>
+                            </Fade>
+                        </Modal>
+                    </ListItem>
                 </List>
             </Drawer>
             <Main open={open}>

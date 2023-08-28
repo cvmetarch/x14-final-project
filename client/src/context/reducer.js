@@ -58,17 +58,28 @@ export default function reducer(state, action) {
                 loading: true
             };
         case "LOGIN_SUCCESS": 
+            localStorage.setItem("token", action.payload.token);
             return {
                 ...state,
                 loading: false,
-                message: action.payload,
                 isAuthenticated: true,
+                isModal: false,
+                message: action.payload,
+                username: action.payload.username,
             }
         case "LOGIN_FAIL":
             return {
                 ...state,
                 loading: false,
                 isAuthenticated: false,
+            }
+        case "LOG_OUT": 
+            return {
+                ...state,
+                loading: false,
+                isAuthenticated: false,
+                isModal: false,
+                username: ""
             }
         case "GET_ALL_STUDENTS": 
             return {

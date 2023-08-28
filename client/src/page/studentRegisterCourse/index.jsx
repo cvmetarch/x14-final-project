@@ -56,7 +56,7 @@ export default function StudentRegisterCourses() {
             flex: 1,
             renderCell: (params) => (
                 <Box>
-                    <Button>Thêm học viên vào lớp</Button>
+                    <Button variant="outlined">Thêm học viên vào lớp</Button>
                 </Box>
             ),
         },
