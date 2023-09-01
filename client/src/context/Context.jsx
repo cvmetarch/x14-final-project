@@ -112,22 +112,13 @@ export function AppProvider({ children }) {
         }
     }
 
-    const getStudentRegisterByCourse = async () => {
+    const getStudentRegisterByCourse = async (courseId) => {
         dispatch({ type: "LOADING" });
         try {           
-            const { data } = await axiosConfig.get("/admin/course/1");
+            const { data } = await axiosConfig.get(`/admin/course/${courseId}`);
             dispatch({ type: "GET_ALL_STUDENTS_REGISTRATION", payload: data.data });
         } catch (error) {
             console.log(error);
-        }
-    }
-
-    const getStudentsRegisterCourse = async () => {
-        dispatch({ type: "LOADING" });
-        try {
-            
-        } catch (error) {
-            
         }
     }
 

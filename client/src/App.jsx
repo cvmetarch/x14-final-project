@@ -21,7 +21,11 @@ export default function App() {
                     <Route path="/admin/facilities" element={<Facilities />} />
                     <Route path="/admin/classes" element={<Classes />} />
                     <Route path="/admin/courses-list" element={<AdminCourseLists />}>
-                        <Route path="/admin/courses-list/course1" element={<StudentRegisterCourses />} />
+                        <Route path="/admin/courses-list/X-Career" element={<StudentRegisterCourses />} />
+                        <Route path="/admin/courses-list/CS-Course" element={<StudentRegisterCourses />} />
+                        <Route path="/admin/courses-list/Data-Analyst" element={<StudentRegisterCourses />} />
+                        <Route path="/admin/courses-list/Blockchain" element={<StudentRegisterCourses />} />
+                        <Route path="/admin/courses-list/IT-BI/BA" element={<StudentRegisterCourses />} />
                     </Route>
                 </Route>
             </Routes>

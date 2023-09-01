@@ -4,11 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import useGlobalContext from '../../context/useGlobalContext';
 
 export default function StudentRegisterCourses({ courseName }) {
-    const { getStudentRegisterByCourse, studentRegisters } = useGlobalContext();
-
-    useEffect(() => {
-        getStudentRegisterByCourse();
-    }, []);
+    const { studentRegisters } = useGlobalContext();
 
     const columns = [
         { field: 'studentId', headerName: 'MSHV', width: 70 },
@@ -75,7 +71,6 @@ export default function StudentRegisterCourses({ courseName }) {
         },
     ];
 
-    console.log(studentRegisters);
     return (
         <React.Fragment>
             <Typography component="h2" variant="h5" mb={1}>DANH SÁCH HỌC VIÊN ĐĂNG KÝ KHÓA HỌC {courseName}</Typography>
