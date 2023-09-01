@@ -59,6 +59,11 @@ export function AppProvider({ children }) {
 
     const submitForm = async (formData) => {
         dispatch({ type: "LOADING" });
+
+        if (!formData.courseId) {
+            formData.courseId = state.selectedCourse;
+        }
+
         try {
             const { data } = await axiosConfig.post("/register", formData);
             dispatch({ type: "SUBMIT_SUCCESS", payload: data.message });

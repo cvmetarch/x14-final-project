@@ -1,35 +1,28 @@
-import 'react-toastify/dist/ReactToastify.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { protectedRoutes } from "./routes/protected/protected";
-import ProtectedRoutes from "./routes/protected/ProtectedRoutes";
 import Admin from "./page/admin";
 import Home from "./page/home";
-import useGlobalContext from "./context/useGlobalContext";
+import Teachers from "./page/teachers";
+import Students from "./page/students";
+import Facilities from "./page/facilities";
+import Classes from "./page/classes";
+import AdminCourseLists from "./page/courseList";
+import StudentRegisterCourses from "./page/studentRegisterCourse";
 
 export default function App() {
-    const { isAuthenticated } = useGlobalContext();
-
     return (
         <div className="app">
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/admin" element={<Admin />}>
-                    {protectedRoutes.map(route => {
-                        const Element = route.element;
-                        return <Route
-                            key={route.id}
-                            path={route.path}
-                            element={
-                                <ProtectedRoutes
-                                    isAuthenticated={isAuthenticated}
-                                    redirectPath="/admin"
-                                >
-                                    <Element />
-                                </ProtectedRoutes>
-                            }
-                        />
-                    })}
+                    <Route path="/admin/teachers" element={<Teachers />} />
+                    <Route path="/admin/students" element={<Students />} />
+                    <Route path="/admin/facilities" element={<Facilities />} />
+                    <Route path="/admin/classes" element={<Classes />} />
+                    <Route path="/admin/courses-list" element={<AdminCourseLists />}>
+                        <Route path="/admin/courses-list/course1" element={<StudentRegisterCourses />} />
+                    </Route>
                 </Route>
             </Routes>
             <ToastContainer autoClose={3000} />
