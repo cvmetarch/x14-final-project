@@ -80,7 +80,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const options = [
     {
         text: 'Danh sách đăng ký',
-        link: '/admin/student-register-courses',
+        link: '/admin/courses-list',
         icon: <LibraryBooksIcon />
     },
     {
