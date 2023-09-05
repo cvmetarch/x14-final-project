@@ -1,77 +1,51 @@
-import React, { useEffect } from 'react';
-import { Box, Typography, Button } from '@mui/material/';
-import { DataGrid } from '@mui/x-data-grid';
+import React from 'react';
+import MaterialTable from 'material-table';
+import { ThemeProvider, createTheme } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import useGlobalContext from '../../context/useGlobalContext';
 
 export default function Student() {
-    const {  getAllStudents, students  } = useGlobalContext();
+    const defaultMaterialTheme = createTheme();
+    const { getAllStudents, students } = useGlobalContext();
 
-    useEffect(() => {
+    React.useEffect(() => {
         getAllStudents();
     }, []);
 
+    console.log(students);
+
     const columns = [
-        {
-            field: 'studentId',
-            headerName: 'ID',
-            width: 70
-        },
-        {
-            field: 'studentName',
-            headerName: 'Họ và tên',
-            width: 200,
-            sortable: false,
-            filterable: false,
-        },
-        {
-            field: 'studentEmail',
-            headerName: 'Email',
-            width: 225,
-            sortable: false,
-            filterable: false,
-        },
-        {
-            field: 'studentPhone',
-            headerName: 'Số điện thoại',
-            width: 200,
-            sortable: false,
-            filterable: false,
-        },
-        {
-            field: "actions",
-            headerName: "",
-            sortable: false,
-            filterable: false,
-            flex: 1,
-            renderCell: (params) => (
-                <Box>
-                    <Button>Chỉnh sửa</Button>
-                    <Button>Xóa</Button>
-                </Box>
-            ),
-        },
-    ];
+        { title: "ID", field: "studentId", emptyValue: () => <p>null</p>, width: "10%"},
+        { title: "Họ và tên", field: "studentName", emptyValue: () => <p>null</p> },
+        { title: "Email", field: "studentEmail", emptyValue: () => <p>null</p> },
+        { title: "Số điện thoại", field: "studentPhone", emptyValue: () => <p>null</p> },
+        { title: "Ngày sinh", field: "studentDob", emptyValue: () => <p>null</p> },
+    ]
 
     return (
-        <React.Fragment>
-            <Typography component="h2" variant="h5" mb={1}>DANH SÁCH HỌC VIÊN</Typography>
-            <Box sx={{ height: 630, width: '100%' }}>
-                <DataGrid
+        <div style={{ width: '100%', height: '100%' }}>
+            <ThemeProvider theme={defaultMaterialTheme}>
+                <MaterialTable
                     columns={columns}
-                    rows={students}
-                    getRowId={(students) => students.studentId}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 10,
-                            },
-                        },
+                    data={students}
+                    title="Danh sách học viên"
+                    icons={{
+                        Clear: () => <CloseIcon />,
+                        Search: () => <SearchIcon />,
+                        FirstPage: () => <FirstPageIcon />,
+                        LastPage: () => <LastPageIcon />,
+                        PreviousPage: () => <ArrowBackIosIcon />,
+                        NextPage: () => <ArrowForwardIosIcon />,
+                        SortArrow: (props) => (<KeyboardArrowUpIcon {...props} />),
                     }}
-                    pageSizeOptions={[5, 10]}
-                // checkboxSelection
-                // disableRowSelectionOnClick
                 />
-            </Box>
-        </React.Fragment>
+            </ThemeProvider>
+        </div>
     );
 }

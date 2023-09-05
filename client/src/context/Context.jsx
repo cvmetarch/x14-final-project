@@ -9,6 +9,7 @@ const initalState = {
     students: [],
     teachers: [],
     studentRegisters: [],
+    classList: [],
     courses: [],
     facilities: [],
     learningTimes: [],
@@ -28,6 +29,7 @@ export function AppProvider({ children }) {
     const [state, dispatch] = useReducer(reducer, initalState);
     const navigate = useNavigate();
 
+    // student page
     const openModal = (id) => dispatch({ type: "OPEN_MODAL", payload: id });
     const closeModal = () => dispatch({ type: "CLOSE_MODAL" });
 
@@ -72,15 +74,19 @@ export function AppProvider({ children }) {
         }
     }
 
+    // Admin page
     const login = async (formData) => {
         dispatch({ type: "LOADING" });
         try {
             const { data } = await axiosConfig.post("/login", formData);
-            dispatch({ type: "LOGIN_SUCCESS", payload: data });
+            dispatch({
+                type: "LOGIN_SUCCESS",
+                payload: data
+            });
             toast.success("Đăng nhập thành công");
         } catch (error) {
             dispatch({ type: "LOGIN_FAIL" });
-            toast.error("Đăng nhập thất bại");    
+            toast.error("Đăng nhập thất bại");
         }
     }
 
@@ -92,31 +98,115 @@ export function AppProvider({ children }) {
         dispatch({ type: "LOG_OUT" });
     }
 
-    const getAllStudents = async () => {
+    const getAllTeachers = async () => {
         dispatch({ type: "LOADING" });
         try {
-            const { data } = await axiosConfig.get("/student/all");
-            dispatch({ type: "GET_ALL_STUDENTS", payload: data.data });
+            const { data } = await axiosConfig.get("/teacher/all");
+            dispatch({
+                type: "GET_ALL_TEACHERS",
+                payload: data.data
+            });
         } catch (error) {
             console.log(error);
         }
     }
 
-    const getAllTeachers = async () => {
+    const getAllStudents = async () => {
         dispatch({ type: "LOADING" });
         try {
-            const { data } = await axiosConfig.get("/teacher/all");
-            dispatch({ type: "GET_ALL_TEACHERS", payload: data.data });
+            const { data } = await axiosConfig.get("/student/all");
+            dispatch({
+                type: "GET_ALL_STUDENTS",
+                payload: data.data
+            });
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    const getStudent = async (studentId) => {
+        dispatch({ type: "LOADING" });
+        try {
+            const { data } = await axiosConfig.get(`/student/${studentId}`);
+            dispatch({
+                type: "GET_STUDENT",
+                payload: data.data
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const updateStudent = async (studentId, studentInfo) => {
+        dispatch({ type: "LOADING" });
+        try {
+            await axiosConfig.put(`/student/${studentId}`, studentInfo);
+            dispatch({ type: "UPDATE_STUDENT_SUCCESS" });
+            toast.success("Cập nhật thông tin học viên thành công");
+        } catch (error) {
+            console.log(error);
+            dispatch({ type: "UPDATE_STUDENT_FAIL" });
+            toast.success("Cập nhật thông tin học viên thất bại");
+        }
+    }
+
+    const deleteStudent = async (studentId) => {
+        dispatch({ type: "LOADING" });
+        try {
+            await axiosConfig.delete(`/student/${studentId}`);
+            dispatch({ type: "DELETE_STUDENT_SUCCESS" });
+            toast.success("Xóa học viên thành công");
+        } catch (error) {
+            console.log(error);
+            dispatch({ type: "DELETE_STUDENT_FAIL" });
+            toast.error("Xóa học viên thất bại");
         }
     }
 
     const getStudentRegisterByCourse = async (courseId) => {
         dispatch({ type: "LOADING" });
-        try {           
+        try {
             const { data } = await axiosConfig.get(`/admin/course/${courseId}`);
-            dispatch({ type: "GET_ALL_STUDENTS_REGISTRATION", payload: data.data });
+            dispatch({
+                type: "GET_ALL_STUDENTS_REGISTRATION",
+                payload: data.data
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getClassList = async () => {
+        dispatch({ type: "LOADING" });
+        try {
+            const { data } = await axiosConfig.get("/class");
+            dispatch({
+                type: "GET_CLASS_LIST",
+                payload: data.data
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const createClass = async (classInfo) => {
+        dispatch({ type: "LOADING" });
+        try {
+            await axiosConfig.post("/class/create", classInfo);
+            dispatch({ type: "CREATE_CLASS_SUCCESS" });
+            toast.success("Tạo lớp học thành công");
+        } catch (error) {
+            console.log(error);
+            dispatch({ type: "CREATE_CLASS_FAIL" });
+            toast.error("Tạo lớp học thất bại");
+        }
+    }
+
+    const getLearningtimes = async () => {
+        dispatch({ type: "LOADING" });
+        try {
+            const { data } = await axiosConfig.get("/learningtimes");
+            dispatch({ type: "GET_LEARNING_TIME", payload: data.data });
         } catch (error) {
             console.log(error);
         }
@@ -137,6 +227,9 @@ export function AppProvider({ children }) {
                 getAllStudents,
                 getAllTeachers,
                 getStudentRegisterByCourse,
+                getClassList,
+                getLearningtimes,
+                createClass,
             }}
         >
             {children}

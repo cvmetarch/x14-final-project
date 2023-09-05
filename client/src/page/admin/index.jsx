@@ -108,7 +108,13 @@ const options = [
 
 export default function AdminLayout() {
     const theme = useTheme();
-    const { isAuthenticated, isModal, openModal, closeModal, logout } = useGlobalContext();
+    const {
+        isAuthenticated,
+        isModal,
+        openModal,
+        closeModal,
+        logout
+    } = useGlobalContext();
     const [open, setOpen] = React.useState(false);
     const [active, setActive] = React.useState("");
 
@@ -216,7 +222,7 @@ export default function AdminLayout() {
                                     <Typography id="transition-modal-title" variant="h6" component="h2">
                                         Bạn muốn đăng xuất khỏi hệ thống
                                     </Typography>
-                                    <Box sx={{ 
+                                    <Box sx={{
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "flex-end",

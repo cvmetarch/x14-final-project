@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Box, Button } from "@mui/material";
 import { Link, Outlet } from "react-router-dom";
 import useGlobalContext from "../../context/useGlobalContext";
@@ -32,10 +32,10 @@ const buttons = [
 ]
 
 export default function AdminCourseLists() {
-    const { getStudentRegisterByCourse, studentRegisters } = useGlobalContext();
-    const [courseId, setCourseId] = useState(null);
+    const { getStudentRegisterByCourse } = useGlobalContext();
+    const [courseId, setCourseId] = React.useState(null);
 
-    useEffect(() => {
+    React.useEffect(() => {
         getStudentRegisterByCourse(courseId);
     }, [courseId]);
 
@@ -43,8 +43,6 @@ export default function AdminCourseLists() {
         setCourseId(Number(e.target.id));
     }
     
-    console.log(studentRegisters);
-
     return (
         <Box>
             <Box sx={{ marginBottom: 4 }}>

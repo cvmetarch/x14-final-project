@@ -101,6 +101,18 @@ export default function reducer(state, action) {
                 loading: false,
                 teachers: action.payload
             }
+        case "GET_CLASS_LIST":
+            return {
+                ...state,
+                loading: false,
+                classList: action.payload
+            }
+        case "GET_LEARNING_TIME": 
+            return {
+                ...state,
+                loading: false,
+                learningTimes: action.payload
+            }
         default:
             return new Error("Invalid action");
     }
