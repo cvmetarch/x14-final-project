@@ -1,0 +1,6 @@
+ALTER TABLE classes DROP FOREIGN KEY classes_ibfk_1;
+
+ALTER TABLE classes RENAME COLUMN lessonId TO courseId;
+
+ALTER TABLE classes
+ADD FOREIGN KEY (courseId) REFERENCES courses(courseId);
