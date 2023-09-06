@@ -1,0 +1,9 @@
+ALTER TABLE studentsperclass DROP FOREIGN KEY studentsperclass_ibfk_3;
+
+ALTER TABLE studentsperclass DROP COLUMN teacherRoleId;
+
+ALTER TABLE teachersperclass
+ADD teacherRoleId INT;
+
+ALTER TABLE teachersperclass
+ADD FOREIGN KEY (teacherRoleId) REFERENCES teacherRoles(teacherRoleId);

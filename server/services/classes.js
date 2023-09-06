@@ -24,16 +24,24 @@ async function getClassList(page = 1) {
 
 async function getClass(id) {
     const rows = await db.query(
+    // `
+    //     SELECT c.classId, c.courseId, co.courseName, c.className, c.learningTimeId, CONCAT(left(l.startTime,5),'-',left(l.endTime,5),' ',l.weekDay) as lTime, s.studentId, t.teacherId, t.teacherRoleId, c.startDate, c.endDate
+    //     FROM classes c
+    //     inner JOIN studentsperclass s ON (c.classId=${id} AND s.classId=${id})
+    //     inner JOIN teachersperclass t ON (c.classId=${id} AND t.classId=${id})
+    //     inner JOIN courses co on (c.courseId=co.courseId)
+    //     inner JOIN learningtimes l ON c.learningTimeId=l.learningTimeId
+    //     WHERE (t.teacherRoleId=1);
+    // `
     `
-        SELECT DISTINCT c.classId, c.courseId, co.courseName, c.className, c.learningTimeId, CONCAT(left(l.startTime,5),'-',left(l.endTime,5),' ',l.weekDay) as lTime, s.studentId, t.teacherId, t.teacherRoleId, c.startDate, c.endDate
-        FROM classes c
-        inner JOIN studentsperclass s ON (c.classId=${id} AND s.classId=${id})
-        inner JOIN teachersperclass t ON (c.classId=${id} AND t.classId=${id})
-        inner JOIN courses co on (c.courseId=co.courseId)
-        inner JOIN learningtimes l ON c.learningTimeId=l.learningTimeId
-        WHERE (t.teacherRoleId=1);
-    `
-    );
+    SELECT DISTINCT s.studentId, stu.studentName, t.teacherId, tea.teacherName, t.teacherRoleId, r.teacherRoleDescription
+    FROM studentsperclass s
+    inner JOIN students stu ON (stu.studentId = s.studentId)
+    inner JOIN teachersperclass t ON ((s.classId = ${ id }) AND (t.classId = ${ id }))
+    inner JOIN teachers tea ON (tea.teacherId = t.teacherId)
+    inner JOIN teacherroles r ON (r.teacherRoleId = t.teacherRoleId);
+    `);
+
     const data = helper.emptyOrRows(rows);
 
     return {
