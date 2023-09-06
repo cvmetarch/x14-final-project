@@ -10,7 +10,7 @@ async function requireSignin(req, res, next) {
             req.headers.authorization,
             process.env.JWT_SECRET
         );
-        req.user = decoded;        
+        req.user = decoded;
         next();
     } catch (err) {
         return res.status(401).json(err);
@@ -22,7 +22,7 @@ async function isAdmin(req, res, next) {
         const userName = req.user.username;
         let userRole = 0;
         if (userName == 'admin' | userName == 'moderator') {
-            userRole = 1; 
+            userRole = 1;
         };
         if (userRole !== 1) {
             return res.status(401).send("Unauthorized");

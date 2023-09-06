@@ -57,8 +57,8 @@ export default function reducer(state, action) {
                 ...state,
                 loading: true
             };
-        case "LOGIN_SUCCESS": 
-            localStorage.setItem("token", action.payload.token);
+        case "LOGIN_SUCCESS":
+            // localStorage.setItem("token", action.payload.token);
             return {
                 ...state,
                 loading: false,
@@ -73,7 +73,7 @@ export default function reducer(state, action) {
                 loading: false,
                 isAuthenticated: false,
             }
-        case "LOG_OUT": 
+        case "LOG_OUT":
             return {
                 ...state,
                 loading: false,
@@ -81,13 +81,13 @@ export default function reducer(state, action) {
                 isModal: false,
                 username: ""
             }
-        case "GET_COURSES": 
+        case "GET_COURSES":
             return {
                 ...state,
                 loading: false,
                 courses: action.payload
             }
-        case "GET_ALL_STUDENTS": 
+        case "GET_ALL_STUDENTS":
             return {
                 ...state,
                 loading: false,
@@ -107,8 +107,8 @@ export default function reducer(state, action) {
                 loading: false,
                 studentRegisters: action.payload
             }
-            
-        case "GET_ALL_TEACHERS": 
+
+        case "GET_ALL_TEACHERS":
             return {
                 ...state,
                 loading: false,
@@ -120,7 +120,7 @@ export default function reducer(state, action) {
                 loading: false,
                 classList: action.payload
             }
-        case "GET_LEARNING_TIME": 
+        case "GET_LEARNING_TIME":
             return {
                 ...state,
                 loading: false,

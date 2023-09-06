@@ -1,9 +1,11 @@
 const express = require('express');
+const { requireSignin, isAdmin } = require('../middlewares/auth');
 const router = express.Router();
+
 const classes = require('../services/classes');
 
 /* GET classes */
-router.get('/', async function (req, res, next) {
+router.get('/', requireSignin, isAdmin, async function (req, res, next)  {
     try {
         res.json(await classes.getClassList(req.query.page));
     } catch (err) {
@@ -13,7 +15,7 @@ router.get('/', async function (req, res, next) {
 });
 
 /* GET 1 class */
-router.get('/:id', async function (req, res, next) {
+router.get('/:id', requireSignin, isAdmin, async function (req, res, next) {
     try {
         res.json(await classes.getClass(req.params.id));
     } catch (err) {
@@ -23,7 +25,7 @@ router.get('/:id', async function (req, res, next) {
 });
 
 
-router.post('/create', async function (req, res, next) {
+router.post('/create', requireSignin, isAdmin, async function (req, res, next) {
     try {
         res.json(await classes.createClass(req.body));
     } catch (err) {
@@ -33,7 +35,7 @@ router.post('/create', async function (req, res, next) {
 });
 
 /* PUT class */
-router.put('/:id', async function (req, res, next) {
+router.put('/:id', requireSignin, isAdmin, async function (req, res, next) {
     try {
         res.json(await classes.updateClass(req.params.id, req.body));
     } catch (err) {

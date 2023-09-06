@@ -1,7 +1,9 @@
 import { createContext, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./auth";
 import { toast } from "react-toastify";
 import axiosConfig from "../config/axiosConfig";
+import axios from "axios";
 import reducer from "./reducer";
 
 const initalState = {
@@ -26,6 +28,7 @@ export const AppContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export function AppProvider({ children }) {
+    const [auth, setAuth] = useAuth();
     const [state, dispatch] = useReducer(reducer, initalState);
     const navigate = useNavigate();
 
@@ -83,6 +86,8 @@ export function AppProvider({ children }) {
                 type: "LOGIN_SUCCESS",
                 payload: data
             });
+            sessionStorage.setItem("auth", JSON.stringify(data));
+            setAuth({ ...auth, token: data.token, user: data.user });
             toast.success("Đăng nhập thành công");
         } catch (error) {
             dispatch({ type: "LOGIN_FAIL" });
@@ -92,7 +97,8 @@ export function AppProvider({ children }) {
 
     const logout = () => {
         dispatch({ type: "LOADING" });
-        localStorage.clear();
+        // localStorage.clear();
+        sessionStorage.clear();
         navigate("/admin");
         window.location.reload();
         dispatch({ type: "LOG_OUT" });
@@ -188,7 +194,7 @@ export function AppProvider({ children }) {
     const getStudentRegisterByCourse = async (courseId) => {
         dispatch({ type: "LOADING" });
         try {
-            const { data } = await axiosConfig.get(`/admin/course/${courseId}`);
+            const { data } = await axios.get(`/admin/course/${courseId}`);
             dispatch({
                 type: "GET_ALL_STUDENTS_REGISTRATION",
                 payload: data.data
@@ -201,7 +207,7 @@ export function AppProvider({ children }) {
     const getClassList = async () => {
         dispatch({ type: "LOADING" });
         try {
-            const { data } = await axiosConfig.get("/class");
+            const { data } = await axios.get("/class");
             dispatch({
                 type: "GET_CLASS_LIST",
                 payload: data.data
@@ -214,7 +220,7 @@ export function AppProvider({ children }) {
     const createClass = async (classInfo) => {
         dispatch({ type: "LOADING" });
         try {
-            await axiosConfig.post("/class/create", classInfo);
+            await axios.post("/class/create", classInfo);
             dispatch({ type: "CREATE_CLASS_SUCCESS" });
             toast.success("Tạo lớp học thành công");
         } catch (error) {
