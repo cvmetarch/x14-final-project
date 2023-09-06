@@ -1,23 +1,30 @@
-import React, { useEffect } from "react";
-import { 
-    Box, 
-    Button, 
-    Dialog, 
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    TextField,
-} from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import React from "react";
+import MaterialTable from 'material-table';
+import { ThemeProvider, createTheme } from '@mui/material';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CloseIcon from '@mui/icons-material/Close';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import SearchIcon from '@mui/icons-material/Search';
+import SaveIcon from '@mui/icons-material/Save';
+
 import useGlobalContext from "../../context/useGlobalContext";
 
 export default function Classes() {
+    const defaultMaterialTheme = createTheme();
     const { getClassList, classList } = useGlobalContext();
-    const [isDialog, setIsDialog] = React.useState(false);
 
-    const openDialog = () => setIsDialog(true);
-    const closeDialog = () => setIsDialog(false);
+    const columns = [
+        { title: "Mã lớp học", field: "classId", emptyValue: () => <p>null</p>, width: "10%" },
+        { title: "Mã khóa học", field: "courseId", emptyValue: () => <p>null</p>, width: "10%" },
+        { title: "Thời gian học", field: "learningTimeId", emptyValue: () => <p>null</p>, width: "10%" },
+        { title: "Tên lớp học", field: "className", emptyValue: () => <p>null</p> },
+        { title: "Ngày bắt đầu", field: "startDate", emptyValue: () => <p>null</p> },
+        { title: "Ngày kết thúc", field: "endDate", emptyValue: () => <p>null</p> },
+    ];
 
     React.useEffect(() => {
         getClassList();
@@ -26,33 +33,33 @@ export default function Classes() {
     console.log("class list: ", classList);
 
     return (
-        <Box>
-            <Button variant="outlined" onClick={openDialog}>
-                <AddIcon sx={{ marginRight: 0.5 }} />
-                Tạo lớp học
-            </Button>
-            <Dialog open={isDialog}>
-                <DialogTitle>Tạo Lớp Học</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We
-                        will send updates occasionally.
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        variant="standard"
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closeDialog}>Cancel</Button>
-                    <Button onClick={closeDialog}>Subscribe</Button>
-                </DialogActions>
-            </Dialog>
-        </Box>
+        <ThemeProvider theme={defaultMaterialTheme}>
+            <MaterialTable
+                columns={columns}
+                data={classList}
+                title="Danh sách lớp học"
+                editable={{
+                    onRowAdd: (newRow) => new Promise((resolve, reject) => {
+                        setTableData([...tableData, newRow]);
+                        resolve();
+                    })
+                }}
+                icons={{
+                    Clear: () => <CloseIcon />,
+                    Search: () => <SearchIcon />,
+                    FirstPage: () => <FirstPageIcon />,
+                    LastPage: () => <LastPageIcon />,
+                    PreviousPage: () => <ArrowBackIosIcon />,
+                    NextPage: () => <ArrowForwardIosIcon />,
+                    SortArrow: (props) => (<KeyboardArrowUpIcon {...props} />),
+                    Add: () => <PlaylistAddIcon />,
+                    Check: () => <SaveIcon />,
+                }}
+                options={{
+                    paginationType: "stepped",
+                    actionsColumnIndex: -1,
+                }}
+            />
+        </ThemeProvider>
     );
 }

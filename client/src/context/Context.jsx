@@ -98,6 +98,15 @@ export function AppProvider({ children }) {
         dispatch({ type: "LOG_OUT" });
     }
 
+    const getCourses = async () => {
+        try {
+            const { data } = await axiosConfig.get("/courses");
+            dispatch({ type: "GET_COURSES", payload: data.data });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const getAllTeachers = async () => {
         dispatch({ type: "LOADING" });
         try {
@@ -224,6 +233,7 @@ export function AppProvider({ children }) {
                 closeAlert,
                 login,
                 logout,
+                getCourses,
                 getAllStudents,
                 getAllTeachers,
                 getStudentRegisterByCourse,

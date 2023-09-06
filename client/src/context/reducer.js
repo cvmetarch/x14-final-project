@@ -81,6 +81,12 @@ export default function reducer(state, action) {
                 isModal: false,
                 username: ""
             }
+        case "GET_COURSES": 
+            return {
+                ...state,
+                loading: false,
+                courses: action.payload
+            }
         case "GET_ALL_STUDENTS": 
             return {
                 ...state,
@@ -112,6 +118,11 @@ export default function reducer(state, action) {
                 ...state,
                 loading: false,
                 learningTimes: action.payload
+            }
+        case "CREATE_CLASS_SUCCESS":
+            return {
+                ...state,
+                loading: false,
             }
         default:
             return new Error("Invalid action");

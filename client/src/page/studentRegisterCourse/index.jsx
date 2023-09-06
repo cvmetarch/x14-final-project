@@ -36,22 +36,31 @@ import SaveIcon from '@mui/icons-material/Save';
 import useGlobalContext from '../../context/useGlobalContext';
 
 function currentDate() {
-    let date = new Date().toLocaleDateString();
-    return date;
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    return `${month}/${day}/${year}`;
 }
 
 export default function StudentRegisterCourses({ courseId, courseName }) {
+    const date = currentDate();
     const defaultMaterialTheme = createTheme();
     const {
+        getCourses,
+        courses,
         getStudentRegisterByCourse,
         studentRegisters,
         createClass
     } = useGlobalContext();
     const [id, setId] = React.useState(courseId);
-    const [timeId, setTimeId] = React.useState(1);
-    const [startDate, setStartDate] = React.useState(dayjs("2023-9-5"));
-    const [endDate, setEndDate] = React.useState(dayjs("2023-9-5"));
     const [isDialog, setIsDialog] = React.useState(false);
+
+    const [courseID, setCourseID] = React.useState(1);
+    const [timeId, setTimeId] = React.useState(1);
+    const [className, setClassName] = React.useState("");
+    const [startDate, setStartDate] = React.useState(dayjs(date));
+    const [endDate, setEndDate] = React.useState(dayjs(date));
 
     const columns = [
         { title: "MSHV", field: "studentId", emptyValue: () => <p>null</p>, sorting: false, width: "10%" },
@@ -73,20 +82,29 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
 
     const handleCreate = () => {
         const classInfo = {
-            courseId: id,
-            name: courseName,
+            courseId: courseID,
+            name: className,
             timeId,
-            startDate,
-            endDate
+            startDate: `${startDate.$y}-${startDate.$M + 1}-${startDate.$D} 00:00:00`,
+            endDate: `${endDate.$y}-${endDate.$M + 1}-${endDate.$D} 00:00:00`
         };
         console.log(classInfo);
-        //createClass(classInfo);
+        createClass(classInfo);
         setIsDialog(false);
+        setCourseID(1);
+        setTimeId(1);
+        setClassName("");
+        setStartDate(dayjs(date));
+        setEndDate(dayjs(date));
     }
 
     React.useEffect(() => {
         getStudentRegisterByCourse(id);
     }, [id]);
+
+    React.useEffect(() => {
+        getCourses();
+    }, []);
 
     return (
         <React.Fragment>
@@ -123,21 +141,22 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
                                     labelId="courseId-label"
                                     id="courseId"
                                     label="Mã khóa học"
-                                    defaultValue={id}
+                                    value={courseID}
+                                    onChange={(e) => setCourseID(e.target.value)}
                                 >
-                                    <MenuItem value={id}>{id}</MenuItem>
+                                    {courses.map(({ courseId }) => (
+                                        <MenuItem key={courseId} value={courseId}>{courseId}</MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
                             <FormControl fullWidth margin="normal">
-                                <InputLabel id="courseName-label">Tên khóa học</InputLabel>
-                                <Select
-                                    labelId="courseName-label"
-                                    id="courseName"
-                                    label="Tên khóa học"
-                                    defaultValue={courseName}
-                                >
-                                    <MenuItem value={courseName}>{courseName}</MenuItem>
-                                </Select>
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Tên lớp học"
+                                    variant="outlined"
+                                    value={className}
+                                    onChange={(e) => setClassName(e.target.value)}
+                                />
                             </FormControl>
                             <FormControl fullWidth margin="normal">
                                 <InputLabel id="learningtimes-label">Thời gian học</InputLabel>
@@ -163,14 +182,14 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
                                 <FormControl fullWidth margin="normal">
                                     <DatePicker
                                         value={startDate}
-                                        onChange={(e) => setStartDate(e.$d)}
+                                        onChange={(e) => setStartDate(e)}
                                         label="Ngày bắt đầu"
                                     />
                                 </FormControl>
                                 <FormControl fullWidth margin="normal">
                                     <DatePicker
                                         value={endDate}
-                                        onChange={(e) => setEndDate(e.$d)}
+                                        onChange={(e) => setEndDate(e)}
                                         label="Ngày kết thúc"
                                     />
                                 </FormControl>
