@@ -5,8 +5,13 @@ const config = require('../config');
 async function getClassList(page = 1) {
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT *
-    FROM classes LIMIT ${offset},${config.listPerPage}`
+        `
+        SELECT c.*, co.courseName, CONCAT(left(l.startTime,5),'-',left(l.endTime,5),' ',l.weekDay) as lTime
+        FROM classes c 
+        inner JOIN learningtimes l ON c.learningTimeId=l.learningTimeId
+        inner JOIN courses co on (c.courseId=co.courseId)
+        LIMIT ${offset},${config.listPerPage}
+    `
     );
     const data = helper.emptyOrRows(rows);
     const meta = { page };
@@ -20,12 +25,12 @@ async function getClassList(page = 1) {
 async function getClass(id) {
     const rows = await db.query(
     `
-        SELECT DISTINCT c.classId, c.courseId, c.className, c.learningTimeId, s.studentId, t.teacherId, t.teacherRoleId, c.startDate, c.endDate
+        SELECT DISTINCT c.classId, c.courseId, co.courseName, c.className, c.learningTimeId, CONCAT(left(l.startTime,5),'-',left(l.endTime,5),' ',l.weekDay) as lTime, s.studentId, t.teacherId, t.teacherRoleId, c.startDate, c.endDate
         FROM classes c
-        inner JOIN studentsperclass s
-        ON (c.classId=${id} AND s.classId=${id})
-        inner JOIN teachersperclass t
-        ON (c.classId=${id} AND t.classId=${id})
+        inner JOIN studentsperclass s ON (c.classId=${id} AND s.classId=${id})
+        inner JOIN teachersperclass t ON (c.classId=${id} AND t.classId=${id})
+        inner JOIN courses co on (c.courseId=co.courseId)
+        inner JOIN learningtimes l ON c.learningTimeId=l.learningTimeId
         WHERE (t.teacherRoleId=1);
     `
     );

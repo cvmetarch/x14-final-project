@@ -133,6 +133,19 @@ export function AppProvider({ children }) {
         }
     }
 
+    const getFacilityList = async () => {
+        dispatch({ type: "LOADING" });
+        try {
+            const { data } = await axiosConfig.get("/facilities");
+            dispatch({
+                type: "GET_FACILITY_LIST",
+                payload: data.data
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const getStudent = async (studentId) => {
         dispatch({ type: "LOADING" });
         try {
@@ -236,6 +249,7 @@ export function AppProvider({ children }) {
                 getCourses,
                 getAllStudents,
                 getAllTeachers,
+                getFacilityList,
                 getStudentRegisterByCourse,
                 getClassList,
                 getLearningtimes,

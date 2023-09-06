@@ -94,6 +94,13 @@ export default function reducer(state, action) {
                 students: action.payload
             }
 
+        case "GET_FACILITY_LIST":
+            return {
+                ...state,
+                loading: false,
+                facilityList: action.payload
+            }
+
         case "GET_ALL_STUDENTS_REGISTRATION":
             return {
                 ...state,

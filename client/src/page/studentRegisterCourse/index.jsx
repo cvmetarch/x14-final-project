@@ -66,11 +66,11 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
         { title: "MSHV", field: "studentId", emptyValue: () => <p>null</p>, sorting: false, width: "10%" },
         { title: "Họ và tên", field: "studentName", emptyValue: () => <p>null</p> },
         { title: "Email", field: "studentEmail", emptyValue: () => <p>null</p> },
-        { title: "Cơ sở", field: "facilityId", emptyValue: () => <p>null</p>, width: "10%" },
-        { title: "Mã khóa học", field: "courseId", emptyValue: () => <p>null</p>, width: "10%" },
-        { title: "Thời gian học", field: "learningTimeId", emptyValue: () => <p>null</p>, width: "10%" },
+        { title: "Cơ sở", field: "facilityName", emptyValue: () => <p>null</p>, width: "10%" },
+        { title: "Tên khóa học", field: "courseName", emptyValue: () => <p>null</p>, width: "10%" },
+        { title: "Thời gian học", field: "lTime", emptyValue: () => <p>null</p>, width: "10%" },
         { title: "Ngày đăng ký", field: "registerDate", emptyValue: () => <p>null</p> },
-        { title: "Trạng thái", field: "registerCourseStatusId", emptyValue: () => <p>null</p>, width: "10%" },
+        { title: "Trạng thái", field: "registerCourseStatusDescription", emptyValue: () => <p>null</p>, width: "10%" },
     ];
 
     const openDialog = () => setIsDialog(true);

@@ -21,11 +21,11 @@ export default function Student() {
     console.log(students);
 
     const columns = [
-        { title: "ID", field: "studentId", emptyValue: () => <p>null</p>, width: "10%"},
-        { title: "Họ và tên", field: "studentName", emptyValue: () => <p>null</p> },
-        { title: "Email", field: "studentEmail", emptyValue: () => <p>null</p> },
-        { title: "Số điện thoại", field: "studentPhone", emptyValue: () => <p>null</p> },
-        { title: "Ngày sinh", field: "studentDob", emptyValue: () => <p>null</p> },
+        { title: "ID", field: "studentId", emptyValue: () => <p>-</p>, width: "10%"},
+        { title: "Họ và tên", field: "studentName", emptyValue: () => <p>-</p> },
+        { title: "Email", field: "studentEmail", emptyValue: () => <p>-</p> },
+        { title: "Số điện thoại", field: "studentPhone", emptyValue: () => <p>-</p> },
+        { title: "Ngày sinh", field: "studentDob", emptyValue: () => <p>-</p> },
     ]
 
     return (

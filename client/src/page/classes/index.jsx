@@ -19,9 +19,9 @@ export default function Classes() {
 
     const columns = [
         { title: "Mã lớp học", field: "classId", emptyValue: () => <p>null</p>, width: "10%" },
-        { title: "Mã khóa học", field: "courseId", emptyValue: () => <p>null</p>, width: "10%" },
-        { title: "Thời gian học", field: "learningTimeId", emptyValue: () => <p>null</p>, width: "10%" },
+        { title: "Khóa học", field: "courseName", emptyValue: () => <p>null</p>, width: "10%" },        
         { title: "Tên lớp học", field: "className", emptyValue: () => <p>null</p> },
+        { title: "Thời gian học", field: "lTime", emptyValue: () => <p>null</p>, width: "10%" },
         { title: "Ngày bắt đầu", field: "startDate", emptyValue: () => <p>null</p> },
         { title: "Ngày kết thúc", field: "endDate", emptyValue: () => <p>null</p> },
     ];
