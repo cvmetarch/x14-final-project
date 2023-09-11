@@ -2,6 +2,12 @@ const db = require('./db');
 const helper = require('../helper');
 const config = require('../config');
 
+const dotenv = require('dotenv');
+
+dotenv.config(); 
+const SibApiV3Sdk =require('sib-api-v3-sdk');
+
+
 async function getRegisterList(page = 1) {
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
@@ -64,11 +70,45 @@ async function createNewRegister(studentRegister) {
         ) LIMIT 1;
         `);
 
+        const courseName = await db.query(
+            `
+            SELECT courseName, courseDescription
+            FROM courses WHERE courseId=${courseId}
+            `);
+        // console.log(courseName[0].courseName, courseName[0].courseDescription);
+
         if ((result.affectedRows) & (result2.affectedRows)) {
             message = 'Đăng ký khóa học thành công!';
+            // send email
+            SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = process.env.BREVO_KEY;
+            new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
+                'subject': 'Thông tin đăng ký khoá học',
+                'sender': { 'email': process.env.EMAIL_FROM, 'name': '[X14] Quản lý đào tạo' },
+                'replyTo': { 'email': 'api@sendinblue.com', 'name': 'Sendinblue' },
+                'to': [{ 'name': name, 'email': email }],
+                'htmlContent':
+                    `
+                    <html>
+                    <body>
+                        <p>Xin chào <b>${name}</b></p>
+                        <h2>Chào mừng bạn đến với khóa học <br> <span style="color:red;"> ${courseName[0].courseName} - ${courseName[0].courseDescription} </span></h2>
+                        <p>Bộ phận quản lý lớp học sẽ liên hệ với bạn trong thời gian sớm nhất. Truy cập <a href="${process.env.CLIENT_URL}">trang chủ</a> để xem thông tin chi tiết!</p>
+                        <hr>
+                        <p>{{params.bodyMessage}}</p>
+                    </body>
+                    </html>
+                    `,
+                'params': {
+                    'bodyMessage': 'Trân trọng!'
+                }
+            }
+            ).then(function (data) {
+                console.log(data);
+            }, function (error) {
+                console.error(error);
+            });
         }        
     }   
-
     return { message };
 }
 
