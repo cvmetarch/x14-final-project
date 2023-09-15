@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./auth";
 import { toast } from "react-toastify";
@@ -7,7 +7,6 @@ import axios from "axios";
 import reducer from "./reducer";
 
 const initalState = {
-    isAuthenticated: false,
     students: [],
     teachers: [],
     studentRegisters: [],
@@ -22,6 +21,7 @@ const initalState = {
     message: "",
     selectedCourse: "",
     username: "",
+    classInfo: [],
 };
 
 export const AppContext = createContext();
@@ -82,12 +82,23 @@ export function AppProvider({ children }) {
         dispatch({ type: "LOADING" });
         try {
             const { data } = await axiosConfig.post("/login", formData);
+
+            if (!data.token) {
+                dispatch({ type: "LOGIN_FAIL" });
+                toast.error("Đăng nhập thất bại");
+                return;
+            }
+
             dispatch({
                 type: "LOGIN_SUCCESS",
                 payload: data
             });
             sessionStorage.setItem("auth", JSON.stringify(data));
-            setAuth({ ...auth, token: data.token, user: data.user });
+            setAuth({
+                ...auth,
+                token: data.token,
+                user: data.user
+            });
             toast.success("Đăng nhập thành công");
         } catch (error) {
             dispatch({ type: "LOGIN_FAIL" });
@@ -217,6 +228,16 @@ export function AppProvider({ children }) {
         }
     }
 
+    const getClassDetail = async (id) => {
+        try {
+            const { data } = await axios.get(`/class/${id}`);
+            console.log(data.data)
+            dispatch({ type: "GET_CLASS_DETAIL", payload: data.data });
+        } catch (error) {
+            console.log("erorr: ", error);
+        }
+    }
+
     const createClass = async (classInfo) => {
         dispatch({ type: "LOADING" });
         try {
@@ -230,6 +251,17 @@ export function AppProvider({ children }) {
         }
     }
 
+    const updateClass = async (classId, classInfoUpdate) => {
+        try {
+            const response = await axios.put(`/class/${classId}`, classInfoUpdate);
+            console.log(response);
+            toast.success("Cập nhật khóa học thành công");
+        } catch (error) {
+            console.log(error);
+            toast.error("Cập nhật khóa học thất bại");
+        }
+    }
+
     const getLearningtimes = async () => {
         dispatch({ type: "LOADING" });
         try {
@@ -239,6 +271,11 @@ export function AppProvider({ children }) {
             console.log(error);
         }
     }
+
+    useEffect(() => {
+        getAllStudents();
+        getAllTeachers();
+    }, []);
 
     return (
         <AppContext.Provider
@@ -258,8 +295,10 @@ export function AppProvider({ children }) {
                 getFacilityList,
                 getStudentRegisterByCourse,
                 getClassList,
+                getClassDetail,
                 getLearningtimes,
                 createClass,
+                updateClass,
             }}
         >
             {children}

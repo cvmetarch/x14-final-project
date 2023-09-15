@@ -14,12 +14,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import Person from '@mui/icons-material/Person';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
-import RoomPreferencesIcon from '@mui/icons-material/RoomPreferences';
 import MenuIcon from '@mui/icons-material/Menu';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ForbiddenAccess from "../../components/ForbiddenAccess";
@@ -84,6 +85,11 @@ const options = [
         icon: <LibraryBooksIcon />
     },
     {
+        text: 'Danh sách lớp học',
+        link: '/admin/class-list',
+        icon: <ListAltIcon />
+    },
+    {
         text: 'Giảng viên',
         link: '/admin/teachers',
         icon: <Person />
@@ -101,15 +107,15 @@ const options = [
     {
         text: 'Lớp học',
         link: '/admin/classes',
-        icon: <RoomPreferencesIcon />
+        icon: <MeetingRoomIcon />
     },
+
 ];
 
 
 export default function AdminLayout() {
     const theme = useTheme();
     const {
-        isAuthenticated,
         isModal,
         openModal,
         closeModal,
@@ -118,8 +124,10 @@ export default function AdminLayout() {
     const [open, setOpen] = React.useState(false);
     const [active, setActive] = React.useState("");
 
+    const token = JSON.parse(sessionStorage.getItem("auth"))?.token;
+
     const handleDrawerOpen = () => {
-        if (isAuthenticated) {
+        if (token) {
             setOpen(true);
         } else {
             setOpen(false);
@@ -132,7 +140,6 @@ export default function AdminLayout() {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
             <AppBar position="fixed" open={open}>
                 <Toolbar>
                     <IconButton
@@ -240,7 +247,7 @@ export default function AdminLayout() {
             <Main open={open}>
                 <DrawerHeader />
                 {/* Content Here */}
-                {isAuthenticated ? <Outlet /> : <ForbiddenAccess />}
+                {token ? <Outlet /> : <ForbiddenAccess />}
             </Main>
         </Box>
     );

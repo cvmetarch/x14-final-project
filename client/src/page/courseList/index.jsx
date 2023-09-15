@@ -29,7 +29,7 @@ const buttons = [
         name: "IT BI/BA",
         path: "IT-BI/BA"
     },
-]
+];
 
 export default function AdminCourseLists() {
     const { getStudentRegisterByCourse } = useGlobalContext();

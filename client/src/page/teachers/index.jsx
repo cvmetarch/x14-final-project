@@ -4,11 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import useGlobalContext from '../../context/useGlobalContext';
 
 export default function Teacher() {
-    const { getAllTeachers, teachers } = useGlobalContext();
-
-    useEffect(() => {
-        getAllTeachers();
-    }, []);
+    const { teachers } = useGlobalContext();
 
     const columns = [
         {

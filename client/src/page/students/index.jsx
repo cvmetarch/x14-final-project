@@ -1,6 +1,7 @@
 import React from 'react';
+import { Box, Button, ThemeProvider, createTheme } from '@mui/material';
 import MaterialTable from 'material-table';
-import { ThemeProvider, createTheme } from '@mui/material';
+
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -12,21 +13,17 @@ import useGlobalContext from '../../context/useGlobalContext';
 
 export default function Student() {
     const defaultMaterialTheme = createTheme();
-    const { getAllStudents, students } = useGlobalContext();
-
-    React.useEffect(() => {
-        getAllStudents();
-    }, []);
-
-    console.log(students);
+    const { students, classList } = useGlobalContext();
 
     const columns = [
-        { title: "ID", field: "studentId", emptyValue: () => <p>-</p>, width: "10%"},
+        { title: "Mã học viên", field: "studentId", emptyValue: () => <p>-</p>, width: "10%" },
         { title: "Họ và tên", field: "studentName", emptyValue: () => <p>-</p> },
         { title: "Email", field: "studentEmail", emptyValue: () => <p>-</p> },
         { title: "Số điện thoại", field: "studentPhone", emptyValue: () => <p>-</p> },
         { title: "Ngày sinh", field: "studentDob", emptyValue: () => <p>-</p> },
     ]
+    
+    console.log(classList)
 
     return (
         <div style={{ width: '100%', height: '100%' }}>

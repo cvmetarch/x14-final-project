@@ -2,12 +2,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Admin from "./page/admin";
+import AdminCourseLists from "./page/courseList";
 import Home from "./page/home";
 import Teachers from "./page/teachers";
 import Students from "./page/students";
 import Facilities from "./page/facilities";
+import ClassList from "./page/classList";
 import Classes from "./page/classes";
-import AdminCourseLists from "./page/courseList";
 import StudentRegisterCourses from "./page/studentRegisterCourse";
 
 export default function App() {
@@ -19,7 +20,8 @@ export default function App() {
                     <Route path="/admin/teachers" element={<Teachers />} />
                     <Route path="/admin/students" element={<Students />} />
                     <Route path="/admin/facilities" element={<Facilities />} />
-                    <Route path="/admin/classes" element={<Classes />} />
+                    <Route path="/admin/class-list" element={<ClassList />} />
+                    <Route path="/admin/classes" element={<Classes />}></Route>
                     <Route path="/admin/courses-list" element={<AdminCourseLists />}>
                         <Route path="/admin/courses-list/X-Career" element={<StudentRegisterCourses courseId={1} courseName="X-Career" />} />
                         <Route path="/admin/courses-list/CS-Course" element={<StudentRegisterCourses courseId={2} courseName="CS Course" />} />

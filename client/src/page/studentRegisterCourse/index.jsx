@@ -5,7 +5,6 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     FormControl,
     InputLabel,
@@ -66,11 +65,11 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
         { title: "MSHV", field: "studentId", emptyValue: () => <p>null</p>, sorting: false, width: "10%" },
         { title: "Họ và tên", field: "studentName", emptyValue: () => <p>null</p> },
         { title: "Email", field: "studentEmail", emptyValue: () => <p>null</p> },
-        { title: "Cơ sở", field: "facilityName", emptyValue: () => <p>null</p>, width: "10%" },
-        { title: "Tên khóa học", field: "courseName", emptyValue: () => <p>null</p>, width: "10%" },
-        { title: "Thời gian học", field: "lTime", emptyValue: () => <p>null</p>, width: "10%" },
+        { title: "Cơ sở", field: "facilityName", emptyValue: () => <p>null</p> },
+        { title: "Tên khóa học", field: "courseName", emptyValue: () => <p>null</p> },
+        { title: "Thời gian học", field: "lTime", emptyValue: () => <p>null</p> },
         { title: "Ngày đăng ký", field: "registerDate", emptyValue: () => <p>null</p> },
-        { title: "Trạng thái", field: "registerCourseStatusDescription", emptyValue: () => <p>null</p>, width: "10%" },
+        { title: "Trạng thái", field: "registerCourseStatusDescription", emptyValue: () => <p>null</p> },
     ];
 
     const openDialog = () => setIsDialog(true);
@@ -88,7 +87,6 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
             startDate: `${startDate.$y}-${startDate.$M + 1}-${startDate.$D} 00:00:00`,
             endDate: `${endDate.$y}-${endDate.$M + 1}-${endDate.$D} 00:00:00`
         };
-        console.log(classInfo);
         createClass(classInfo);
         setIsDialog(false);
         setCourseID(1);
@@ -128,7 +126,7 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
                     </Box>
                 </Box>
                 <Box>
-                    <Button variant="outlined" onClick={openDialog}>
+                    <Button variant="outlined" onClick={openDialog} >
                         <AddIcon sx={{ marginRight: 0.5 }} />
                         Tạo lớp học
                     </Button>
@@ -136,7 +134,7 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
                         <DialogTitle>Tạo Lớp Học</DialogTitle>
                         <DialogContent sx={{ width: "420px" }}>
                             <FormControl fullWidth margin="normal">
-                                <InputLabel id="courseId-label">Mã khóa học</InputLabel>
+                                <InputLabel id="courseId-label">Khóa học</InputLabel>
                                 <Select
                                     labelId="courseId-label"
                                     id="courseId"
@@ -144,8 +142,8 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
                                     value={courseID}
                                     onChange={(e) => setCourseID(e.target.value)}
                                 >
-                                    {courses.map(({ courseId }) => (
-                                        <MenuItem key={courseId} value={courseId}>{courseId}</MenuItem>
+                                    {courses.map(({ courseId, courseName }) => (
+                                        <MenuItem key={courseId} value={courseId}>{courseName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -167,15 +165,9 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
                                     value={timeId}
                                     onChange={(e) => setTimeId(e.target.value)}
                                 >
-                                    <MenuItem value={1}>1</MenuItem>
-                                    <MenuItem value={2}>2</MenuItem>
-                                    <MenuItem value={3}>3</MenuItem>
-                                    <MenuItem value={4}>4</MenuItem>
-                                    <MenuItem value={5}>5</MenuItem>
-                                    <MenuItem value={6}>6</MenuItem>
-                                    <MenuItem value={7}>7</MenuItem>
-                                    <MenuItem value={8}>8</MenuItem>
-                                    <MenuItem value={9}>9</MenuItem>
+                                    {studentRegisters.map(({ learningTimeId, lTime }) => (
+                                        <MenuItem value={learningTimeId}>{lTime}</MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -212,12 +204,6 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
                         columns={columns}
                         data={studentRegisters}
                         title="Danh sách học viên"
-                        editable={{
-                            onRowAdd: (newRow) => new Promise((resolve, reject) => {
-                                setTableData([...tableData, newRow]);
-                                resolve();
-                            })
-                        }}
                         icons={{
                             Clear: () => <CloseIcon />,
                             Search: () => <SearchIcon />,
@@ -226,7 +212,7 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
                             PreviousPage: () => <ArrowBackIosIcon />,
                             NextPage: () => <ArrowForwardIosIcon />,
                             SortArrow: (props) => (<KeyboardArrowUpIcon {...props} />),
-                            Add: () => <PlaylistAddIcon />,
+                            Edit: () => <PlaylistAddIcon />,
                             Check: () => <SaveIcon />,
                         }}
                         options={{

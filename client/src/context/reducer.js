@@ -58,11 +58,9 @@ export default function reducer(state, action) {
                 loading: true
             };
         case "LOGIN_SUCCESS":
-            // localStorage.setItem("token", action.payload.token);
             return {
                 ...state,
                 loading: false,
-                isAuthenticated: true,
                 isModal: false,
                 message: action.payload,
                 username: action.payload.username,
@@ -119,6 +117,11 @@ export default function reducer(state, action) {
                 ...state,
                 loading: false,
                 classList: action.payload
+            }
+        case "GET_CLASS_DETAIL":
+            return {
+                ...state,
+                classInfo: action.payload
             }
         case "GET_LEARNING_TIME":
             return {
