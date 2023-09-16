@@ -8,7 +8,6 @@ import Teachers from "./page/teachers";
 import Students from "./page/students";
 import Facilities from "./page/facilities";
 import ClassList from "./page/classList";
-import Classes from "./page/classes";
 import StudentRegisterCourses from "./page/studentRegisterCourse";
 
 export default function App() {
@@ -21,7 +20,6 @@ export default function App() {
                     <Route path="/admin/students" element={<Students />} />
                     <Route path="/admin/facilities" element={<Facilities />} />
                     <Route path="/admin/class-list" element={<ClassList />} />
-                    <Route path="/admin/classes" element={<Classes />}></Route>
                     <Route path="/admin/courses-list" element={<AdminCourseLists />}>
                         <Route path="/admin/courses-list/X-Career" element={<StudentRegisterCourses courseId={1} courseName="X-Career" />} />
                         <Route path="/admin/courses-list/CS-Course" element={<StudentRegisterCourses courseId={2} courseName="CS Course" />} />

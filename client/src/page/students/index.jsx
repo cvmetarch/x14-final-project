@@ -22,8 +22,6 @@ export default function Student() {
         { title: "Số điện thoại", field: "studentPhone", emptyValue: () => <p>-</p> },
         { title: "Ngày sinh", field: "studentDob", emptyValue: () => <p>-</p> },
     ]
-    
-    console.log(classList)
 
     return (
         <div style={{ width: '100%', height: '100%' }}>

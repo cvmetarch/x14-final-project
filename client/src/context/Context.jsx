@@ -21,7 +21,8 @@ const initalState = {
     message: "",
     selectedCourse: "",
     username: "",
-    classInfo: [],
+    studentList: [],
+    teacherName: "",
 };
 
 export const AppContext = createContext();
@@ -219,6 +220,7 @@ export function AppProvider({ children }) {
         dispatch({ type: "LOADING" });
         try {
             const { data } = await axios.get("/class");
+            console.log(data);
             dispatch({
                 type: "GET_CLASS_LIST",
                 payload: data.data

@@ -1,86 +1,47 @@
-import React, { useEffect } from 'react';
-import { Box, Typography, Button } from '@mui/material/';
-import { DataGrid } from '@mui/x-data-grid';
+import React from 'react';
+import { Box, Button, ThemeProvider, createTheme } from '@mui/material';
+import MaterialTable from 'material-table';
+
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import useGlobalContext from '../../context/useGlobalContext';
 
 export default function Teacher() {
+    const defaultMaterialTheme = createTheme();
     const { teachers } = useGlobalContext();
 
     const columns = [
-        {
-            field: 'teacherId',
-            headerName: 'ID',
-            width: 70
-        },
-        {
-            field: 'teacherName',
-            headerName: 'Họ và tên',
-            width: 200,
-            sortable: false,
-            filterable: false,
-        },
-        {
-            field: 'teacherEmail',
-            headerName: 'Email',
-            width: 225,
-            sortable: false,
-            filterable: false,
-        },
-        {
-            field: 'teacherPhone',
-            headerName: 'Số điện thoại',
-            width: 200,
-            sortable: false,
-            filterable: false,
-        },
-        // {
-        //     field: 'teacherUsername',
-        //     headerName: 'Tên đăng nhập',
-        //     width: 200,
-        //     sortable: false,
-        //     filterable: false,
-        // },
-        // {
-        //     field: 'teacherPassword',
-        //     headerName: 'Mật Khẩu',
-        //     width: 200,
-        //     sortable: false,
-        //     filterable: false,
-        // },
-        {
-            field: "actions",
-            headerName: "",
-            sortable: false,
-            filterable: false,
-            flex: 1,
-            renderCell: (params) => (
-                <Box>
-                    <Button>Thêm giảng viên vào lớp</Button>
-                </Box>
-            ),
-        },
-    ];
+        { title: "Mã giảng viên", field: "teacherId", emptyValue: () => <p>-</p>, width: "10%" },
+        { title: "Tên giảng viên", field: "teacherName", emptyValue: () => <p>-</p> },
+        { title: "Email", field: "teacherEmail", emptyValue: () => <p>-</p> },
+        { title: "Số điện thoại", field: "teacherPhone", emptyValue: () => <p>-</p> },
+        { title: "Tài khoản", field: "teacherUsername", emptyValue: () => <p>-</p> },
+        { title: "Mật khẩu", field: "teacherPassword", emptyValue: () => <p>-</p> },
+    ]
 
     return (
-        <React.Fragment>
-            <Typography component="h2" variant="h5" mb={1}>DANH SÁCH GIẢNG VIÊN</Typography>
-            <div style={{ width: "100%", height: "100%" }}>
-                <DataGrid
+        <div style={{ width: '100%', height: '100%' }}>
+            <ThemeProvider theme={defaultMaterialTheme}>
+                <MaterialTable
                     columns={columns}
-                    rows={teachers}
-                    getRowId={(teachers) => teachers.teacherId}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 10,
-                            },
-                        },
+                    data={teachers}
+                    title="Danh sách học viên"
+                    icons={{
+                        Clear: () => <CloseIcon />,
+                        Search: () => <SearchIcon />,
+                        FirstPage: () => <FirstPageIcon />,
+                        LastPage: () => <LastPageIcon />,
+                        PreviousPage: () => <ArrowBackIosIcon />,
+                        NextPage: () => <ArrowForwardIosIcon />,
+                        SortArrow: (props) => (<KeyboardArrowUpIcon {...props} />),
                     }}
-                    pageSizeOptions={[5, 10]}
-                // checkboxSelection
-                // disableRowSelectionOnClick
                 />
-            </div>
-        </React.Fragment>
+            </ThemeProvider>
+        </div>
     );
 }

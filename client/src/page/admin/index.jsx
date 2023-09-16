@@ -85,9 +85,9 @@ const options = [
         icon: <LibraryBooksIcon />
     },
     {
-        text: 'Danh sách lớp học',
+        text: 'Lớp học',
         link: '/admin/class-list',
-        icon: <ListAltIcon />
+        icon: <MeetingRoomIcon />
     },
     {
         text: 'Giảng viên',
@@ -104,12 +104,6 @@ const options = [
         link: '/admin/facilities',
         icon: <HomeWorkIcon />
     },
-    {
-        text: 'Lớp học',
-        link: '/admin/classes',
-        icon: <MeetingRoomIcon />
-    },
-
 ];
 
 

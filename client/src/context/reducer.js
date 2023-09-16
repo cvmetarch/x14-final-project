@@ -91,7 +91,6 @@ export default function reducer(state, action) {
                 loading: false,
                 students: action.payload
             }
-
         case "GET_FACILITY_LIST":
             return {
                 ...state,
@@ -119,9 +118,16 @@ export default function reducer(state, action) {
                 classList: action.payload
             }
         case "GET_CLASS_DETAIL":
+            let name;
+            if (action.payload[1].length < 1) {
+                name = "Chưa có giảng viên"
+            } else {
+                name = action.payload[1][0].teacherName;
+            }
             return {
                 ...state,
-                classInfo: action.payload
+                studentList: action.payload[0],
+                teacherName: name,
             }
         case "GET_LEARNING_TIME":
             return {

@@ -60,7 +60,8 @@ export default function ClassList() {
         classList,
         updateClass,
         getClassDetail,
-        classInfo
+        studentList,
+        teacherName
     } = useGlobalContext();
     // edit table
     const [tableData, setTableData] = React.useState(classList);
@@ -120,10 +121,8 @@ export default function ClassList() {
     // get class list
     React.useEffect(() => {
         getClassList();
+        getClassDetail(1);
     }, []);
-    
-    console.log(classList);
-    console.log(classInfo);
 
     return (
         <React.Fragment>
@@ -306,7 +305,7 @@ export default function ClassList() {
                             id="role"
                             label="Vai trò giảng viên"
                             value={teacherRoleId}
-                            onChange={(e) => setTeacherRoleId(e.target.value) }
+                            onChange={(e) => setTeacherRoleId(e.target.value)}
                         >
                             <MenuItem value={1}>Giảng viên</MenuItem>
                             <MenuItem value={2}>Mentor</MenuItem>
@@ -354,16 +353,16 @@ export default function ClassList() {
                     </Typography>
                     <Typography fontWeight={600} marginY={1}>
                         Số lượng học viên:
-                        <Box component="span" marginLeft={1} fontWeight={500}>{classInfo[0].length || 0}</Box>
+                        <Box component="span" marginLeft={1} fontWeight={500}>{studentList.length || 0}</Box>
                     </Typography>
-                    <Typography fontWeight={600}>
+                    <Typography fontWeight={600} marginY={1}>
                         Giảng viên:
-                        <Box component="span" marginLeft={1} fontWeight={500}>{classInfo[1][0]?.teacherName || "Chưa có giảng viên"}</Box>
+                        <Box component="span" marginLeft={1} fontWeight={500}>{teacherName}</Box>
                     </Typography>
-                    {classInfo[0].length > 0 &&
+                    {studentList.length > 0 &&
                         <Table
                             columns={studentColumns}
-                            tableData={classInfo[0]}
+                            tableData={studentList}
                         />
                     }
                     <Box sx={{
