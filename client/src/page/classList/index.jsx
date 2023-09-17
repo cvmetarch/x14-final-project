@@ -29,6 +29,7 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
+import { DataGrid } from "@mui/x-data-grid";
 
 
 const columns = [
@@ -42,17 +43,16 @@ const columns = [
     { title: "Ngày kết thúc", field: "endDate", type: 'date', dateSetting: { locale: "en-GB" }, emptyValue: () => <p>null</p> },
 ];
 
+const teacherColumns = [
+    { field: 'teacherId', title: 'Mã giảng viên', align: 'center', width: 150 },
+    { field: 'teacherName', title: 'Tên giảng viên', width: 300 },
+    { field: 'teacherRoleId', title: '', hidden:true, width: 100 },
+    { field: 'teacherRoleDescription', title: 'Vai trò', align: 'center', width: 150 },
+]
+
 const studentColumns = [
-    {
-        field: 'studentId',
-        headerName: 'Mã học viên',
-        width: 200
-    },
-    {
-        field: 'studentName',
-        headerName: 'Tên học viên',
-        width: 300,
-    },
+    { field: 'studentId', title: 'Mã học viên', align: 'center', width: 150 },
+    { field: 'studentName', title: 'Tên học viên', width: 450, },
 ]
 
 export default function ClassList() {
@@ -63,7 +63,8 @@ export default function ClassList() {
         updateClass,
         getClassDetail,
         studentList,
-        teacherName
+        teacherList,
+        teacherName,
     } = useGlobalContext();
     // edit table
     const [tableData, setTableData] = React.useState(classList);
@@ -123,7 +124,7 @@ export default function ClassList() {
     // get class list
     React.useEffect(() => {
         getClassList();
-        getClassDetail(1);
+        // getClassDetail(1);
     }, []);
 
     return (
@@ -213,7 +214,7 @@ export default function ClassList() {
                         },
                     ]}
                     icons={{
-                        Clear: () => <CloseIcon />,
+                        ResetSearch: () => <CloseIcon />,
                         Search: () => <SearchIcon />,
                         FirstPage: () => <FirstPageIcon />,
                         LastPage: () => <LastPageIcon />,
@@ -368,15 +369,73 @@ export default function ClassList() {
                         <Box component="span" marginLeft={1} fontWeight={500}>{studentList.length || 0}</Box>
                     </Typography>
                     <Typography fontWeight={600} marginY={1}>
-                        Giảng viên:
+                        Giảng viên chính:
                         <Box component="span" marginLeft={1} fontWeight={500}>{teacherName}</Box>
                     </Typography>
-                    {studentList.length > 0 &&
-                        <Table
-                            columns={studentColumns}
-                            tableData={studentList}
+                    {teacherList.length > 0 &&
+                        <MaterialTable
+                            columns={teacherColumns}
+                            data={teacherList}
+                            title='Danh sách giảng viên'
+                            actions={[
+                                {
+                                    icon: () => <DeleteIcon />,
+                                    onClick: (e, data) => {
+                                        setEndDate(data.endDate);
+                                    },
+                                    tooltip: "Xoá giảng viên"
+                                },
+                            ]}
+                            icons={{
+                                ResetSearch: () => <CloseIcon />,
+                                Search: () => <SearchIcon />,
+                                FirstPage: () => <FirstPageIcon />,
+                                LastPage: () => <LastPageIcon />,
+                                PreviousPage: () => <ArrowBackIosIcon />,
+                                NextPage: () => <ArrowForwardIosIcon />,
+                                SortArrow: (props) => (<KeyboardArrowUpIcon {...props} />),
+
+                            }}
+                            options={{
+                                paginationType: "stepped",
+                                pageSize: 2,
+                                pageSizeOptions: [2,5,10],
+                                actionsColumnIndex: -1,
+                            }}
                         />
                     }
+
+                    {studentList.length > 0 &&
+                        <MaterialTable
+                            columns={studentColumns}
+                            data={studentList}
+                            title='Danh sách học viên'
+                            actions={[
+                                {
+                                    icon: () => <DeleteIcon />,
+                                    onClick: (e, data) => {
+                                        setEndDate(data.endDate);
+                                    },
+                                    tooltip: "Xoá học viên"
+                                },
+                            ]}
+                            icons={{
+                                ResetSearch: () => <CloseIcon />,
+                                Search: () => <SearchIcon />,
+                                FirstPage: () => <FirstPageIcon />,
+                                LastPage: () => <LastPageIcon />,
+                                PreviousPage: () => <ArrowBackIosIcon />,
+                                NextPage: () => <ArrowForwardIosIcon />,
+                                SortArrow: (props) => (<KeyboardArrowUpIcon {...props} />),
+
+                            }}
+                            options={{
+                                // paginationType: "stepped",
+                                actionsColumnIndex: -1,
+                            }}
+                        />
+                    }
+
                     <Box sx={{
                         marginTop: 2,
                         display: "flex",

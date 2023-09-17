@@ -161,9 +161,9 @@ async function updateClass(id, classBody) {
         `
     );
 
-    if (result.changedRows) {
-        message = 'Cập nhật thông tin lớp học thành công!';
-    }
+    // if (result.changedRows) {
+    //     message = 'Cập nhật thông tin lớp học thành công!';
+    // }
 
     const studentId = classBody.studentId;
 
@@ -253,6 +253,34 @@ async function updateClass(id, classBody) {
     return { message };
 }
 
+async function removeStudentFromClass(id, stuId) {
+    const result = await db.query(
+        `DELETE FROM studentsPerClass WHERE (classId=${id} AND studentId=${stuId})`
+    );
+
+    let message = 'Xoá học viên không thành công!';
+
+    if (result.affectedRows) {
+        message = 'Xoá học viên thành công!';
+    }
+
+    return { message };
+}
+
+async function removeTeacherFromClass(id, teaId) {
+    const result = await db.query(
+        `DELETE FROM teachersPerClass WHERE (classId=${id} AND teacherId=${teaId})`
+    );
+
+    let message = 'Xoá giảng viên không thành công!';
+
+    if (result.affectedRows) {
+        message = 'Xoá giảng viên thành công!';
+    }
+
+    return { message };
+}
+
 async function removeClass(id) {
     const result = await db.query(
         `DELETE FROM classes WHERE classId=${id}`
@@ -272,5 +300,7 @@ module.exports = {
     getClass,
     createClass,
     updateClass,
+    removeStudentFromClass,
+    removeTeacherFromClass,
     removeClass
 }

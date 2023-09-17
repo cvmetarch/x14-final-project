@@ -123,10 +123,16 @@ export default function reducer(state, action) {
                 name = "Chưa có giảng viên"
             } else {
                 name = action.payload[1][0].teacherName;
+                for (let i in action.payload[1].length){
+                    if (action.payload[1][i].teacherRoleId == 1){
+                        name = action.payload[1][i].teacherName;
+                    }
+                }
             }
             return {
                 ...state,
                 studentList: action.payload[0],
+                teacherList: action.payload[1],
                 teacherName: name,
             }
         case "GET_LEARNING_TIME":

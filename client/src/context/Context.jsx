@@ -22,6 +22,7 @@ const initalState = {
     selectedCourse: "",
     username: "",
     studentList: [],
+    teacherList: [],
     teacherName: "",
 };
 

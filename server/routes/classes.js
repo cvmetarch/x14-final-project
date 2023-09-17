@@ -44,5 +44,34 @@ router.put('/:id', requireSignin, isAdmin, async function (req, res, next) {
     }
 });
 
+/* REMOVE student from class*/
+router.delete('/:id/student/:stuId', async function (req, res, next) {
+    try {
+        res.json(await classes.removeStudentFromClass(req.params.id, req.params.stuId));
+    } catch (err) {
+        console.error(`Xóa học viên không thành công `, err.message);
+        next(err);
+    }
+});
+
+/* REMOVE teacher from class*/
+router.delete('/:id/teacher/:teaId', async function (req, res, next) {
+    try {
+        res.json(await classes.removeTeacherFromClass(req.params.id, req.params.teaId));
+    } catch (err) {
+        console.error(`Xóa giảng viên không thành công `, err.message);
+        next(err);
+    }
+});
+
+/* DELETE class*/
+router.delete('/:id/', async function (req, res, next) {
+    try {
+        res.json(await classes.removeClass(req.params.id));
+    } catch (err) {
+        console.error(`Xóa lớp học không thành công `, err.message);
+        next(err);
+    }
+});
 
 module.exports = router;
