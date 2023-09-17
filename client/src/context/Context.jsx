@@ -220,7 +220,7 @@ export function AppProvider({ children }) {
         dispatch({ type: "LOADING" });
         try {
             const { data } = await axios.get("/class");
-            console.log(data);
+            // console.log(data);
             dispatch({
                 type: "GET_CLASS_LIST",
                 payload: data.data
@@ -233,10 +233,10 @@ export function AppProvider({ children }) {
     const getClassDetail = async (id) => {
         try {
             const { data } = await axios.get(`/class/${id}`);
-            console.log(data.data)
+            // console.log(data.data)
             dispatch({ type: "GET_CLASS_DETAIL", payload: data.data });
         } catch (error) {
-            console.log("erorr: ", error);
+            console.log("error: ", error);
         }
     }
 

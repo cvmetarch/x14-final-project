@@ -17,6 +17,7 @@ import dayjs from 'dayjs';
 import MaterialTable from 'material-table';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { ThemeProvider, createTheme } from '@mui/material';
 
@@ -68,8 +69,8 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
         { title: "Cơ sở", field: "facilityName", emptyValue: () => <p>null</p> },
         { title: "Tên khóa học", field: "courseName", emptyValue: () => <p>null</p> },
         { title: "Thời gian học", field: "lTime", emptyValue: () => <p>null</p> },
-        { title: "Ngày đăng ký", field: "registerDate", emptyValue: () => <p>null</p> },
-        { title: "Trạng thái", field: "registerCourseStatusDescription", emptyValue: () => <p>null</p> },
+        { title: "Ngày đăng ký", field: "registerDate", type: 'date', dateSetting: { locale: "en-GB" }, emptyValue: () => <p>null</p> },
+        // { title: "Trạng thái", field: "registerCourseStatusDescription", emptyValue: () => <p>null</p> },
     ];
 
     const openDialog = () => setIsDialog(true);
@@ -170,7 +171,7 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='en-gb'>
                                 <FormControl fullWidth margin="normal">
                                     <DatePicker
                                         value={startDate}

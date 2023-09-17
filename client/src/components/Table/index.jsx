@@ -15,7 +15,7 @@ export default function Table({ columns, tableData}) {
                         },
                     },
                 }}
-                pageSizeOptions={[5]}
+                pageSizeOptions={[5,10]}
             />
         </React.Fragment>
     );

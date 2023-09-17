@@ -21,7 +21,7 @@ export default function Teacher() {
         { title: "Email", field: "teacherEmail", emptyValue: () => <p>-</p> },
         { title: "Số điện thoại", field: "teacherPhone", emptyValue: () => <p>-</p> },
         { title: "Tài khoản", field: "teacherUsername", emptyValue: () => <p>-</p> },
-        { title: "Mật khẩu", field: "teacherPassword", emptyValue: () => <p>-</p> },
+        // { title: "Mật khẩu", field: "teacherPassword", emptyValue: () => <p>-</p> },
     ]
 
     return (

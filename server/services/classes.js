@@ -12,7 +12,7 @@ async function getClassList(page = 1) {
     const rows = await db.query(
         `
         SELECT c.*, co.courseName, CONCAT(left(l.startTime,5),'-',left(l.endTime,5),' ',l.weekDay) as lTime
-        FROM classes c 
+        FROM classes c
         inner JOIN learningtimes l ON c.learningTimeId=l.learningTimeId
         inner JOIN courses co on (c.courseId=co.courseId)
         LIMIT ${offset},${config.listPerPage}
@@ -38,14 +38,14 @@ async function getClass(id) {
     //     WHERE (t.teacherRoleId=1);
     // `
     const stuRows = await db.query(
-    `    
+    `
     SELECT DISTINCT s.studentId, stu.studentName
     FROM studentsperclass s
     inner JOIN students stu ON ((stu.studentId = s.studentId) AND (s.classId= ${ id }));
     `);
 
     const teaRows = await db.query(
-    `        
+    `
     SELECT DISTINCT t.teacherId, tea.teacherName, t.teacherRoleId, r.teacherRoleDescription
     FROM teachersperclass t
     inner JOIN teachers tea ON ((tea.teacherId = t.teacherId) AND (t.classId = ${ id }))
@@ -92,9 +92,10 @@ function sendNotification(className, courseName, learningTime, startDate, endDat
     const classInfo = ['', ' có thay đổi như sau'];
     const additionalInfo = ['', 'Bạn sẽ là người đồng hành cùng lớp với vai trò'];
     const roleName = ['', 'Giảng viên', 'Trợ giảng'];
-
+    const sDate = new Date(startDate).toLocaleDateString('en-GB');
+    const eDate = new Date(endDate).toLocaleDateString('en-GB');
+    // console.log(sDate,eDate);
     SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = process.env.BREVO_KEY;
-
     new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
         'subject': emailSubject[typeOfNoti],
         'sender': { 'email': process.env.EMAIL_FROM, 'name': '[X14] Quản lý đào tạo' },
@@ -109,16 +110,17 @@ function sendNotification(className, courseName, learningTime, startDate, endDat
                         <p>Thông tin về lớp học${classInfo[typeOfNoti]}:</p>
                         <p>${additionalInfo[(isTeacher>0)?1:0]} <b>${roleName[isTeacher]}</b></p>
                         <p>Thời gian học: ${learningTime} <br>
-                        Ngày khai giảng: ${startDate} <br>
-                        Ngày dự kiến kết thúc: ${endDate}. <hr>
+                        Ngày khai giảng: ${sDate} <br>
+                        Ngày dự kiến kết thúc: ${eDate} <hr>
                         Truy cập <a href="${process.env.CLIENT_URL}">trang chủ</a> để xem thông tin chi tiết!</p>
                         <hr>
+                        <p>Trân trọng! </p><br>
                         <p>{{params.bodyMessage}}</p>
                     </body>
                     </html>
                     `,
         'params': {
-            'bodyMessage': 'Trân trọng! Học viện công nghệ MindX.'
+            'bodyMessage': 'Học viện công nghệ MindX.'
         }
     }
     ).then(function (data) {
@@ -137,8 +139,8 @@ async function updateClass(id, classBody) {
 
     let message = 'Cập nhật không thành công!';
     let resultStudent;
-    let resultTeacher;
-    
+    let resultTeacher=false;
+
     const courseName = await db.query(
         `
             SELECT courseName
@@ -147,18 +149,18 @@ async function updateClass(id, classBody) {
     const learnTime = await db.query(
         `
             SELECT CONCAT(left(startTime,5),'-',left(endTime,5),' ',weekDay) as lTime
-            FROM learningtimes 
+            FROM learningtimes
             WHERE learningTimeId=${timeId}
         `);
 
     const result = await db.query(
         `
-        UPDATE classes 
+        UPDATE classes
         SET courseId=${courseId}, className="${className}", learningTimeId=${timeId}, startDate="${startDate}", endDate="${endDate}"
         WHERE (classId=${id} and (courseId!=${courseId} or className!="${className}" or learningTimeId!=${timeId} or startDate!="${startDate}" or endDate!="${endDate}"));
         `
     );
-    
+
     if (result.changedRows) {
         message = 'Cập nhật thông tin lớp học thành công!';
     }
@@ -171,7 +173,7 @@ async function updateClass(id, classBody) {
 
         if (addStu) {
             resultStudent = await db.query(`INSERT INTO studentsPerClass (classId, studentId) VALUES (${id}, ${studentId})`);
-            
+
             const receiverInfo = await db.query(
                 `
                 SELECT studentName, studentEmail
@@ -186,61 +188,66 @@ async function updateClass(id, classBody) {
     const teacherId = classBody.teacherId;
     const teacherRoleId = classBody.teacherRoleId;
 
-    if ((teacherId!=null) & (teacherRoleId!=null)) {     
+    if ((teacherId!=null) & (teacherRoleId!=null)) {
+        resultStudent = true;
         const addTea = (await db.query(
-            `select * from teachersperclass where (classId = ${id} AND teacherId = ${teacherId})`)).length ? false : true;   
-            
-        const receiverInfo = await db.query(
-            `
-                SELECT teacherName, teacherEmail
-                FROM teachers WHERE teacherId=${teacherId};
-                `);
-        const name = receiverInfo[0].teacherName;
-        const email = receiverInfo[0].teacherEmail;
+            `select * from teachersperclass where (classId = ${id} AND teacherId = ${teacherId})`)).length ? false : true;
 
-        if (addTea) {                
-            resultTeacher = await db.query(
+        if (addTea) {
+            let resTeacher = await db.query(
                 `
                 INSERT INTO teachersPerClass (classId, teacherId, teacherRoleId) VALUES (${id}, ${teacherId}, ${teacherRoleId})
                 `);
-            
+            const receiverInfo = await db.query(
+                `
+                    SELECT teacherName, teacherEmail
+                    FROM teachers WHERE teacherId=${teacherId};
+                    `);
+            const name = receiverInfo[0].teacherName;
+            const email = receiverInfo[0].teacherEmail;
             sendNotification(className, courseName[0].courseName, learnTime[0].lTime, startDate, endDate, name, email, 0, teacherRoleId);
-
         } else {
-            resultTeacher = await db.query(
+            let resTeacher = await db.query(
                 `
                 UPDATE teachersPerClass SET teacherRoleId=${teacherRoleId}
                 WHERE (classId=${id} AND teacherId = ${teacherId} AND teacherRoleId != ${teacherRoleId});
                 `);
-            if (resultTeacher.affectedRows) {
-            sendNotification(className, courseName[0].courseName, learnTime[0].lTime, startDate, endDate, name, email, 1, teacherRoleId);}
-            
+            if (resTeacher.affectedRows) {
+                const receiverInfo = await db.query(
+                    `
+                        SELECT teacherName, teacherEmail
+                        FROM teachers WHERE teacherId=${teacherId};
+                        `);
+                const name = receiverInfo[0].teacherName;
+                const email = receiverInfo[0].teacherEmail;
+                sendNotification(className, courseName[0].courseName, learnTime[0].lTime, startDate, endDate, name, email, 1, teacherRoleId);
+            }
         };
     };
-    
-    if ((result.changedRows>0) | (resultStudent) | (resultTeacher.affectedRows) | (resultTeacher.changedRows)) {
+
+    if ((result.changedRows>0) | (resultStudent) | (resultTeacher)) {
         message = 'Cập nhật thông tin lớp học thành công!';
-        
-        const stuRows = await db.query(
-            `    
-            SELECT DISTINCT stu.studentName, stu.studentEmail
-            FROM studentsperclass s
-            inner JOIN students stu ON ((stu.studentId = s.studentId) AND (s.classId= ${id}));
-            `);
+        if (result.changedRows>0){
+            const stuRows = await db.query(
+                `
+                SELECT DISTINCT stu.studentName, stu.studentEmail
+                FROM studentsperclass s
+                inner JOIN students stu ON ((stu.studentId = s.studentId) AND (s.classId= ${id}));
+                `);
 
-        for (let i in stuRows) {
-            sendNotification(className, courseName[0].courseName, learnTime[0].lTime, startDate, endDate, stuRows[i].studentName, stuRows[i].studentEmail, 1, 0);
-        }
+            for (let i in stuRows) {
+                sendNotification(className, courseName[0].courseName, learnTime[0].lTime, startDate, endDate, stuRows[i].studentName, stuRows[i].studentEmail, 1, 0);
+            }
+            const teaRows = await db.query(
+                `
+                SELECT DISTINCT tea.teacherName, tea.teacherEmail, t.teacherRoleId
+                FROM teachersperclass t
+                inner JOIN teachers tea ON ((tea.teacherId = t.teacherId) AND (t.classId = ${id}));
+                `);
 
-        const teaRows = await db.query(
-            `        
-            SELECT DISTINCT tea.teacherName, tea.teacherEmail, t.teacherRoleId
-            FROM teachersperclass t
-            inner JOIN teachers tea ON ((tea.teacherId = t.teacherId) AND (t.classId = ${id}));
-            `);        
-        
-        for (let i in teaRows) {
-            sendNotification(className, courseName[0].courseName, learnTime[0].lTime, startDate, endDate, teaRows[i].teacherName, teaRows[i].teacherEmail, 1, 0);
+            for (let i in teaRows) {
+                sendNotification(className, courseName[0].courseName, learnTime[0].lTime, startDate, endDate, teaRows[i].teacherName, teaRows[i].teacherEmail, 1, 0);
+            }
         }
     }
     return { message };

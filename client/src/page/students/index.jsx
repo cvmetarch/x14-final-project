@@ -20,7 +20,7 @@ export default function Student() {
         { title: "Họ và tên", field: "studentName", emptyValue: () => <p>-</p> },
         { title: "Email", field: "studentEmail", emptyValue: () => <p>-</p> },
         { title: "Số điện thoại", field: "studentPhone", emptyValue: () => <p>-</p> },
-        { title: "Ngày sinh", field: "studentDob", emptyValue: () => <p>-</p> },
+        // { title: "Ngày sinh", field: "studentDob", emptyValue: () => <p>-</p> },
     ]
 
     return (
