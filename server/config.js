@@ -14,7 +14,7 @@ const config = {
         password: db_password,
         database: db_name,
     },
-    listPerPage: 10,
+    listPerPage: 50,
 };
 
 module.exports = config;
