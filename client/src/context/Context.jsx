@@ -102,6 +102,7 @@ export function AppProvider({ children }) {
                 user: data.user
             });
             toast.success("Đăng nhập thành công");
+            navigate("/admin/courses-list");
         } catch (error) {
             dispatch({ type: "LOGIN_FAIL" });
             toast.error("Đăng nhập thất bại");
@@ -110,7 +111,6 @@ export function AppProvider({ children }) {
 
     const logout = () => {
         dispatch({ type: "LOADING" });
-        // localStorage.clear();
         sessionStorage.clear();
         navigate("/admin");
         window.location.reload();
@@ -275,6 +275,16 @@ export function AppProvider({ children }) {
         }
     }
 
+    const deleteClass = async (classId) => {
+        try {
+            await axios.delete(`/class/${classId}/`);
+            toast.success("Hủy lớp thành công");
+        } catch (error) {
+            console.log(error);
+            toast.error("Hủy lớp thất bại");
+        }
+    }
+
     useEffect(() => {
         getAllStudents();
         getAllTeachers();
@@ -302,6 +312,7 @@ export function AppProvider({ children }) {
                 getLearningtimes,
                 createClass,
                 updateClass,
+                deleteClass
             }}
         >
             {children}

@@ -29,30 +29,28 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
-import { DataGrid } from "@mui/x-data-grid";
 
 
 const columns = [
-    { title: "Mã lớp học", field: "classId", editable: 'never', emptyValue: () => <p>null</p>, width: "10%" },
-    { title: "Mã khóa học", field: "courseId", emptyValue: () => <p>null</p> },
-    { title: "Khóa học", field: "courseName", editable: 'never', emptyValue: () => <p>null</p> },
+    { title: "Mã lớp học", field: "classId", emptyValue: () => <p>null</p>, width: "10%" },
+    { title: "Khóa học", field: "courseName", emptyValue: () => <p>null</p> },
     { title: "Tên lớp học", field: "className", emptyValue: () => <p>null</p> },
-    { title: "Thời gian học", field: "learningTimeId", emptyValue: () => <p>null</p> },
-    { title: "Thời gian học", field: "lTime", editable: 'never', emptyValue: () => <p>null</p> },
-    { title: "Ngày bắt đầu", field: "startDate", type: 'date', dateSetting: { locale: "en-GB" }, emptyValue: () => <p>null</p> },
-    { title: "Ngày kết thúc", field: "endDate", type: 'date', dateSetting: { locale: "en-GB" }, emptyValue: () => <p>null</p> },
+    { title: "Thời gian học", field: "lTime", emptyValue: () => <p>null</p> },
+    { title: "Ngày bắt đầu", field: "startDate", emptyValue: () => <p>null</p> },
+    { title: "Ngày kết thúc", field: "endDate", emptyValue: () => <p>null</p> },
 ];
 
-const teacherColumns = [
-    { field: 'teacherId', title: 'Mã giảng viên', align: 'center', width: 150 },
-    { field: 'teacherName', title: 'Tên giảng viên', width: 300 },
-    { field: 'teacherRoleId', title: '', hidden:true, width: 100 },
-    { field: 'teacherRoleDescription', title: 'Vai trò', align: 'center', width: 150 },
-]
-
 const studentColumns = [
-    { field: 'studentId', title: 'Mã học viên', align: 'center', width: 150 },
-    { field: 'studentName', title: 'Tên học viên', width: 450, },
+    {
+        field: 'studentId',
+        headerName: 'Mã học viên',
+        width: 200
+    },
+    {
+        field: 'studentName',
+        headerName: 'Tên học viên',
+        width: 300,
+    },
 ]
 
 export default function ClassList() {
@@ -63,8 +61,8 @@ export default function ClassList() {
         updateClass,
         getClassDetail,
         studentList,
-        teacherList,
         teacherName,
+        deleteClass
     } = useGlobalContext();
     // edit table
     const [tableData, setTableData] = React.useState(classList);
@@ -90,8 +88,8 @@ export default function ClassList() {
             courseId,
             name: classTitle,
             timeId,
-            startDate: startDate.slice(0, 10) + " 12:00:00",
-            endDate: endDate.slice(0, 10) + " 12:00:00",
+            startDate: startDate.slice(0, 10) + " 00:00:00",
+            endDate: endDate.slice(0, 10) + " 00:00:00",
             studentId: Number(studentId),
             teacherId,
             teacherRoleId
@@ -104,8 +102,8 @@ export default function ClassList() {
             courseId,
             name: classTitle,
             timeId,
-            startDate: startDate.slice(0, 10) + " 12:00:00",
-            endDate: endDate.slice(0, 10) + " 12:00:00",
+            startDate: startDate.slice(0, 10) + " 00:00:00",
+            endDate: endDate.slice(0, 10) + " 00:00:00",
             studentId,
             teacherId: Number(teacherId),
             teacherRoleId: Number(teacherRoleId)
@@ -124,7 +122,7 @@ export default function ClassList() {
     // get class list
     React.useEffect(() => {
         getClassList();
-        // getClassDetail(1);
+        getClassDetail(1);
     }, []);
 
     return (
@@ -140,16 +138,6 @@ export default function ClassList() {
                             updatedTable[oldRow.tableData.id] = newRow;
                             setTableData(updatedTable);
                             setIsUpdate(true);
-
-                            let startDateParsed= new Date(Date.parse(newRow['startDate']));
-                            if (startDateParsed.toISOString()!=newRow['startDate']) {
-                                newRow['startDate']=startDateParsed.toISOString();
-                            }
-                            let endDateParsed= new Date(Date.parse(newRow['endDate']));
-                            if (endDateParsed.toISOString()!=newRow['endDate']) {
-                                newRow['endDate']=endDateParsed.toISOString();
-                            }
-
                             const {
                                 classId,
                                 courseId,
@@ -162,8 +150,8 @@ export default function ClassList() {
                                 courseId,
                                 name: className,
                                 timeId: learningTimeId,
-                                startDate: startDate.slice(0,10)+ " 12:00:00",
-                                endDate: endDate.slice(0,10)+ " 12:00:00",
+                                startDate: startDate.slice(0, 10) + " 00:00:00",
+                                endDate: endDate.slice(0, 10) + " 00:00:00",
                                 studentId: null,
                                 teadcherId: null,
                                 teacherRoleId: null,
@@ -171,9 +159,14 @@ export default function ClassList() {
                             updateClass(classId, classInfoUpdate);
                             setTimeout(() => resolve(), 500);
                         }),
-                        onRowDelete: () => {
-
-                        }
+                        onRowDelete: (selectedRow) => new Promise((resolve, reject) => {
+                            const updatedTable = [...classList];
+                            updatedTable.splice(selectedRow.tableData.id, 1);
+                            setIsUpdate(true);
+                            setTableData(updatedTable);
+                            deleteClass(selectedRow.classId);
+                            setTimeout(() => resolve(), 500);
+                        }),
                     }}
                     actions={[
                         {
@@ -214,7 +207,7 @@ export default function ClassList() {
                         },
                     ]}
                     icons={{
-                        ResetSearch: () => <CloseIcon />,
+                        Clear: () => <CloseIcon />,
                         Search: () => <SearchIcon />,
                         FirstPage: () => <FirstPageIcon />,
                         LastPage: () => <LastPageIcon />,
@@ -369,73 +362,15 @@ export default function ClassList() {
                         <Box component="span" marginLeft={1} fontWeight={500}>{studentList.length || 0}</Box>
                     </Typography>
                     <Typography fontWeight={600} marginY={1}>
-                        Giảng viên chính:
+                        Giảng viên:
                         <Box component="span" marginLeft={1} fontWeight={500}>{teacherName}</Box>
                     </Typography>
-                    {teacherList.length > 0 &&
-                        <MaterialTable
-                            columns={teacherColumns}
-                            data={teacherList}
-                            title='Danh sách giảng viên'
-                            actions={[
-                                {
-                                    icon: () => <DeleteIcon />,
-                                    onClick: (e, data) => {
-                                        setEndDate(data.endDate);
-                                    },
-                                    tooltip: "Xoá giảng viên"
-                                },
-                            ]}
-                            icons={{
-                                ResetSearch: () => <CloseIcon />,
-                                Search: () => <SearchIcon />,
-                                FirstPage: () => <FirstPageIcon />,
-                                LastPage: () => <LastPageIcon />,
-                                PreviousPage: () => <ArrowBackIosIcon />,
-                                NextPage: () => <ArrowForwardIosIcon />,
-                                SortArrow: (props) => (<KeyboardArrowUpIcon {...props} />),
-
-                            }}
-                            options={{
-                                paginationType: "stepped",
-                                pageSize: 2,
-                                pageSizeOptions: [2,5,10],
-                                actionsColumnIndex: -1,
-                            }}
-                        />
-                    }
-
                     {studentList.length > 0 &&
-                        <MaterialTable
+                        <Table
                             columns={studentColumns}
-                            data={studentList}
-                            title='Danh sách học viên'
-                            actions={[
-                                {
-                                    icon: () => <DeleteIcon />,
-                                    onClick: (e, data) => {
-                                        setEndDate(data.endDate);
-                                    },
-                                    tooltip: "Xoá học viên"
-                                },
-                            ]}
-                            icons={{
-                                ResetSearch: () => <CloseIcon />,
-                                Search: () => <SearchIcon />,
-                                FirstPage: () => <FirstPageIcon />,
-                                LastPage: () => <LastPageIcon />,
-                                PreviousPage: () => <ArrowBackIosIcon />,
-                                NextPage: () => <ArrowForwardIosIcon />,
-                                SortArrow: (props) => (<KeyboardArrowUpIcon {...props} />),
-
-                            }}
-                            options={{
-                                // paginationType: "stepped",
-                                actionsColumnIndex: -1,
-                            }}
+                            tableData={studentList}
                         />
                     }
-
                     <Box sx={{
                         marginTop: 2,
                         display: "flex",
@@ -448,3 +383,7 @@ export default function ClassList() {
         </React.Fragment>
     );
 }
+
+
+
+
