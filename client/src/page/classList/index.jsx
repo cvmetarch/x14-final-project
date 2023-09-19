@@ -32,12 +32,14 @@ import SaveIcon from '@mui/icons-material/Save';
 
 
 const columns = [
-    { title: "Mã lớp học", field: "classId", emptyValue: () => <p>null</p>, width: "10%" },
-    { title: "Khóa học", field: "courseName", emptyValue: () => <p>null</p> },
+    { title: "Mã lớp học", field: "classId", editable: 'never', emptyValue: () => <p>null</p>, width: "10%" },
+    { title: "", field: "courseId", emptyValue: () => <p>null</p> , width: "2.5%" },
+    { title: "Khóa học", field: "courseName", editable: 'never', emptyValue: () => <p>null</p> },
     { title: "Tên lớp học", field: "className", emptyValue: () => <p>null</p> },
-    { title: "Thời gian học", field: "lTime", emptyValue: () => <p>null</p> },
-    { title: "Ngày bắt đầu", field: "startDate", emptyValue: () => <p>null</p> },
-    { title: "Ngày kết thúc", field: "endDate", emptyValue: () => <p>null</p> },
+    { title: "", field: "learningTimeId", emptyValue: () => <p>null</p>, width: "2.5%"  },
+    { title: "Thời gian học", field: "lTime", editable: 'never', emptyValue: () => <p>null</p> },
+    { title: "Ngày bắt đầu", field: "startDate", type: 'date', dateSetting: { locale: "en-GB" }, emptyValue: () => <p>null</p> },
+    { title: "Ngày kết thúc", field: "endDate", type: 'date', dateSetting: { locale: "en-GB" }, emptyValue: () => <p>null</p> },
 ];
 
 const studentColumns = [
@@ -88,8 +90,8 @@ export default function ClassList() {
             courseId,
             name: classTitle,
             timeId,
-            startDate: startDate.slice(0, 10) + " 00:00:00",
-            endDate: endDate.slice(0, 10) + " 00:00:00",
+            startDate: startDate.slice(0, 10) + " 12:00:00",
+            endDate: endDate.slice(0, 10) + " 12:00:00",
             studentId: Number(studentId),
             teacherId,
             teacherRoleId
@@ -102,8 +104,8 @@ export default function ClassList() {
             courseId,
             name: classTitle,
             timeId,
-            startDate: startDate.slice(0, 10) + " 00:00:00",
-            endDate: endDate.slice(0, 10) + " 00:00:00",
+            startDate: startDate.slice(0, 10) + " 12:00:00",
+            endDate: endDate.slice(0, 10) + " 12:00:00",
             studentId,
             teacherId: Number(teacherId),
             teacherRoleId: Number(teacherRoleId)
@@ -138,6 +140,16 @@ export default function ClassList() {
                             updatedTable[oldRow.tableData.id] = newRow;
                             setTableData(updatedTable);
                             setIsUpdate(true);
+
+                            let startDateParsed= new Date(Date.parse(newRow['startDate']));
+                            if (startDateParsed.toISOString()!=newRow['startDate']) {
+                                newRow['startDate']=startDateParsed.toISOString();
+                            }
+                            let endDateParsed= new Date(Date.parse(newRow['endDate']));
+                            if (endDateParsed.toISOString()!=newRow['endDate']) {
+                                newRow['endDate']=endDateParsed.toISOString();
+                            }
+
                             const {
                                 classId,
                                 courseId,
@@ -150,8 +162,8 @@ export default function ClassList() {
                                 courseId,
                                 name: className,
                                 timeId: learningTimeId,
-                                startDate: startDate.slice(0, 10) + " 00:00:00",
-                                endDate: endDate.slice(0, 10) + " 00:00:00",
+                                startDate: startDate.slice(0, 10) + " 12:00:00",
+                                endDate: endDate.slice(0, 10) + " 12:00:00",
                                 studentId: null,
                                 teadcherId: null,
                                 teacherRoleId: null,
