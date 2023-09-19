@@ -282,8 +282,18 @@ async function removeTeacherFromClass(id, teaId) {
 }
 
 async function removeClass(id) {
+    let r1 = await db.query(
+        `
+        DELETE FROM teachersPerClass WHERE (classId=${id});
+        `);
+    let r2 = await db.query(
+        `
+        DELETE FROM studentsPerClass WHERE (classId=${id});
+        `);
     const result = await db.query(
-        `DELETE FROM classes WHERE classId=${id}`
+        `
+        DELETE FROM classes WHERE classId=${id};
+        `
     );
 
     let message = 'Hủy lớp không thành công!';
