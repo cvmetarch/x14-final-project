@@ -16,7 +16,7 @@ export default function Student() {
     const { students, classList } = useGlobalContext();
 
     const columns = [
-        { title: "Mã học viên", field: "studentId", emptyValue: () => <p>-</p>, width: "10%" },
+        { title: "Mã học viên", align: "center", field: "studentId", emptyValue: () => <p>-</p>, width: "10%" },
         { title: "Họ và tên", field: "studentName", emptyValue: () => <p>-</p> },
         { title: "Email", field: "studentEmail", emptyValue: () => <p>-</p> },
         { title: "Số điện thoại", field: "studentPhone", emptyValue: () => <p>-</p> },
@@ -31,7 +31,7 @@ export default function Student() {
                     data={students}
                     title="Danh sách học viên"
                     icons={{
-                        Clear: () => <CloseIcon />,
+                        ResetSearch: () => <CloseIcon />,
                         Search: () => <SearchIcon />,
                         FirstPage: () => <FirstPageIcon />,
                         LastPage: () => <LastPageIcon />,

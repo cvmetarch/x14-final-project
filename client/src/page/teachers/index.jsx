@@ -16,7 +16,7 @@ export default function Teacher() {
     const { teachers } = useGlobalContext();
 
     const columns = [
-        { title: "Mã giảng viên", field: "teacherId", emptyValue: () => <p>-</p>, width: "10%" },
+        { title: "Mã giảng viên", align: "center", field: "teacherId", emptyValue: () => <p>-</p>, width: "10%" },
         { title: "Tên giảng viên", field: "teacherName", emptyValue: () => <p>-</p> },
         { title: "Email", field: "teacherEmail", emptyValue: () => <p>-</p> },
         { title: "Số điện thoại", field: "teacherPhone", emptyValue: () => <p>-</p> },
@@ -32,7 +32,7 @@ export default function Teacher() {
                     data={teachers}
                     title="Danh sách học viên"
                     icons={{
-                        Clear: () => <CloseIcon />,
+                        ResetSearch: () => <CloseIcon />,
                         Search: () => <SearchIcon />,
                         FirstPage: () => <FirstPageIcon />,
                         LastPage: () => <LastPageIcon />,

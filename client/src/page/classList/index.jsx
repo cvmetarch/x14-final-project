@@ -32,20 +32,22 @@ import SaveIcon from '@mui/icons-material/Save';
 
 
 const columns = [
-    { title: "Mã lớp học", field: "classId", editable: 'never', emptyValue: () => <p>null</p>, width: "10%" },
+    { title: "Mã lớp học", field: "classId", editable: 'never', align: "center", emptyValue: () => <p>null</p>, width: "10%" },
     { title: "", field: "courseId", emptyValue: () => <p>null</p> , width: "2.5%" },
     { title: "Khóa học", field: "courseName", editable: 'never', emptyValue: () => <p>null</p> },
-    { title: "Tên lớp học", field: "className", emptyValue: () => <p>null</p> },
+    { title: "Tên lớp học", field: "className", align: "center", emptyValue: () => <p>null</p> },
     { title: "", field: "learningTimeId", emptyValue: () => <p>null</p>, width: "2.5%"  },
     { title: "Thời gian học", field: "lTime", editable: 'never', emptyValue: () => <p>null</p> },
-    { title: "Ngày bắt đầu", field: "startDate", type: 'date', dateSetting: { locale: "en-GB" }, emptyValue: () => <p>null</p> },
-    { title: "Ngày kết thúc", field: "endDate", type: 'date', dateSetting: { locale: "en-GB" }, emptyValue: () => <p>null</p> },
+    { title: "Ngày bắt đầu", field: "startDate", align: "center", type: 'date', dateSetting: { locale: "en-GB" }, emptyValue: () => <p>null</p> },
+    { title: "Ngày kết thúc", field: "endDate", align: "center", type: 'date', dateSetting: { locale: "en-GB" }, emptyValue: () => <p>null</p> },
 ];
 
 const studentColumns = [
     {
         field: 'studentId',
         headerName: 'Mã học viên',
+        align: "center",
+        headerAlign: 'center' ,
         width: 200
     },
     {
@@ -219,7 +221,7 @@ export default function ClassList() {
                         },
                     ]}
                     icons={{
-                        Clear: () => <CloseIcon />,
+                        ResetSearch: () => <CloseIcon />,
                         Search: () => <SearchIcon />,
                         FirstPage: () => <FirstPageIcon />,
                         LastPage: () => <LastPageIcon />,

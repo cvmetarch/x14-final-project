@@ -32,7 +32,7 @@ export default function Facility() {
                     data={facilityList}
                     title="Danh sách cơ sở"
                     icons={{
-                        Clear: () => <CloseIcon />,
+                        ResetSearch: () => <CloseIcon />,
                         Search: () => <SearchIcon />,
                         FirstPage: () => <FirstPageIcon />,
                         LastPage: () => <LastPageIcon />,

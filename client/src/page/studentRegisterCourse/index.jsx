@@ -207,7 +207,7 @@ export default function StudentRegisterCourses({ courseId, courseName }) {
                         data={studentRegisters}
                         title="Danh sách học viên"
                         icons={{
-                            Clear: () => <CloseIcon />,
+                            ResetSearch: () => <CloseIcon />,
                             Search: () => <SearchIcon />,
                             FirstPage: () => <FirstPageIcon />,
                             LastPage: () => <LastPageIcon />,
